@@ -1,0 +1,2 @@
+pnpm create next-app kanowa --template typescript
+
