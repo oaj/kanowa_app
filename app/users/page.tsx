@@ -6,10 +6,10 @@ export default async function Users() {
 
     const users = await prisma.user.findMany()
   
-    
+
     return (
         <div>
-            <div>Users</div>
+            <div className={'text-red-500'}>Users</div>
             <ul>
                 {users.map(user =>
                     <li key={user.id}>{user.name}</li>

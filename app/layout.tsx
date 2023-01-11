@@ -1,4 +1,4 @@
-// import { Header } from "./header";
+import { Header } from './header';
 import './globals.css';
 
 export default function RootLayout({ children }: {
@@ -7,8 +7,7 @@ export default function RootLayout({ children }: {
   return (
     <html lang="en">
       <body>
-        <div>Root Layout</div>
-        {/* <Header/> */}
+        <Header/>
         {children}
       </body>
     </html>
