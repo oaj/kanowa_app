@@ -7,13 +7,16 @@ import * as React from "react";
 import { EventBus } from "../eventbus/event-bus";
 import { MdMenu, MdChevronRight, MdOutlineAccountCircle, MdOutlineSettings, MdSupervisorAccount, MdHouse, MdFilterNone, MdOutlineLock } from "react-icons/md";
 import { User } from "@prisma/client";
+import { signIn, signOut, useSession } from "next-auth/react";
 
 
-type Props = {
-  currentUser: User | undefined
-}
+export const CssMenu = () => {
+  const { data: session } = useSession();
+  // console.log({ session });
 
-export const CssMenu = ({ currentUser }: Props) => {
+  const loggedIn = session?.user
+  // const admin = session?.user.role.includes("ROLE_ADMIN")
+
   // currentUser?.roles.includes("")
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -47,10 +50,16 @@ export const CssMenu = ({ currentUser }: Props) => {
     return () => document.removeEventListener("click", el);
   }, [])
 
+  function handleLogin() {
+    signIn()
+    handleCloseMenu();
+  }
+
   const handleLogOut = (event: Event | React.SyntheticEvent) => {
     console.log('LogOut');
+    signOut()
     handleCloseMenu();
-    EventBus.getInstance().dispatch<string>('logout');
+    // EventBus.getInstance().dispatch<string>('logout');
   }
 
   const handleBurgerClick = () => {
@@ -85,13 +94,13 @@ export const CssMenu = ({ currentUser }: Props) => {
             <Link href='/home' onClick={handleCloseMenu} className="link">
               Home
             </Link>
-            <Link href='/user' onClick={handleCloseMenu} className="link">
+            <Link href='/users' onClick={handleCloseMenu} className="link">
               User
             </Link>
             <Link href='/mod' onClick={handleCloseMenu} className="link">
               Moderator
             </Link>
-            <Link href='/admin/*' onClick={handleCloseMenu} className="link">
+            <Link href='/admin' onClick={handleCloseMenu} className="link">
               Admin Board
             </Link>
           </div>
@@ -119,18 +128,18 @@ export const CssMenu = ({ currentUser }: Props) => {
             <Link href='/colony/register' onClick={handleCloseMenu} className="link">
               Register Kanowa
             </Link>
-            <Link href='/profile' onClick={handleCloseMenu} className="link" style={{ display: currentUser ? "flex" : "none" }}>
+            <Link href='/profile' onClick={handleCloseMenu} className="link" style={{ display: loggedIn ? "flex" : "none" }}>
               Profile
             </Link>
-            <Link href='/changePassword' onClick={handleCloseMenu} className="link" style={{ display: currentUser ? "flex" : "none" }}>
+            <Link href='/changePassword' onClick={handleCloseMenu} className="link" style={{ display: loggedIn ? "flex" : "none" }}>
               <MdOutlineLock className="no-events x-large" /> Change Password
             </Link>
-            <Link href='/login' className="link" style={{ display: currentUser ? "flex" : "none" }} onClick={handleLogOut}>
+            <button className="link" style={{ display: loggedIn ? "flex" : "none" }} onClick={handleLogOut}>
               Logout
-            </Link>
-            <Link href='/login' onClick={handleCloseMenu} className="link" style={{ display: currentUser ? "none" : "flex" }}>
+            </button>
+            <button onClick={handleLogin} className="link" style={{ display: loggedIn ? "none" : "flex" }}>
               Login
-            </Link>
+            </button>
           </div>
         </div>
       </div>

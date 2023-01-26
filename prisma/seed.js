@@ -12,11 +12,12 @@ const load = async () => {
     // await prisma.$queryRaw`ALTER TABLE User AUTO_INCREMENT = 1`;
     // console.log('reset user auto increment to 1');
 
-    await prisma.user.createMany({
-      data: users,
-    });
-    console.log('Added user data');
-
+    for (const user of users) {
+      await prisma.user.create({
+        data: user
+      });
+      console.log('Added a user data');
+    }
   } catch (e) {
     console.error(e);
     process.exit(1);

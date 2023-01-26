@@ -1,14 +1,22 @@
+"use client"
 import { Header } from './header';
 import './globals.css';
+import './App.css';
+import { SessionProvider } from "next-auth/react"
+import { ReactNode } from 'react';
 
-export default function RootLayout({ children }: {
-  children: React.ReactNode;
-}) {
+interface IProps { 
+  children: ReactNode,
+}
+
+export default function RootLayout({ children }: IProps) {
   return (
     <html lang="en">
       <body>
-        <Header/>
-        {children}
+        <SessionProvider>
+          <Header />
+          <>{children}</>
+        </SessionProvider>
       </body>
     </html>
   );

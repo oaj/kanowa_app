@@ -2,15 +2,18 @@ const { Prisma } = require('@prisma/client');
 
 const users = [
   {
-    name: 'Anders And',
+    firstname: 'Anders',
+    lastname: 'And',
     email: 'anders@andeby.dr',
   },
   {
-    name: 'Andersine And',
+    firstname: 'Andersine',
+    lastname: 'And',
     email: 'andersine@amfibia.dr',
   },
   {
-    name: 'Mickey Mouse',
+    firstname: 'Mickey',
+    lastname: 'Mouse',
     email: 'mickey@amfibia.dr',
   }
 ];
