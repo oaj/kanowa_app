@@ -9,7 +9,7 @@ const load = async () => {
     await prisma.user.deleteMany();
     console.log('Deleted records in user table');
 
-    // await prisma.$queryRaw`ALTER TABLE User AUTO_INCREMENT = 1`;
+    // await index.$queryRaw`ALTER TABLE User AUTO_INCREMENT = 1`;
     // console.log('reset user auto increment to 1');
 
     for (const user of users) {

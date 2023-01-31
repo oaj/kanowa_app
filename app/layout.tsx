@@ -4,6 +4,7 @@ import './globals.css';
 import './App.css';
 import { SessionProvider } from "next-auth/react"
 import { ReactNode } from 'react';
+// import "bootstrap/dist/css/bootstrap.min.css";
 
 interface IProps { 
   children: ReactNode,

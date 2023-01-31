@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client-js"
+  provider = "index-client-js"
 }
 
 datasource db {
@@ -12,8 +12,8 @@ datasource db {
 
 //------------------------------------
 //                Run after edit :
-//                pnpm prisma generate
-//                pnpm prisma db push
+//                pnpm index generate
+//                pnpm index db push
 //------------------------------------
 
 model User {

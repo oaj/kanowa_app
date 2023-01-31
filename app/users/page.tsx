@@ -1,10 +1,10 @@
 import React from 'react'
-import prisma from '../../lib/prisma';
+import index from '@/lib/prisma';
 
 
 export default async function Users() {
 
-    const users = await prisma.user.findMany()
+    const users = await index.user.findMany()
 
     // console.log('users', users)
 

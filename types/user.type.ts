@@ -1,3 +1,4 @@
+import {Role} from "@prisma/client";
 export interface IUser {
   id: string | null,
   email: string,
@@ -21,7 +22,7 @@ export interface IViewManagedUser {
   lastname: string,
   email: string,
   phone: string | null,
-  role: IRole,
+  role: Role,
   activated: boolean,
   blocked: boolean,
   imageUrl: string,
@@ -37,36 +38,32 @@ export interface IEditManagedUser {
   firstName: string,
   lastName: string,
   email: string,
-  role: IRole;
+  role: Role;
 }
 
-export type IRole = 'ROLE_USER' | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_GOD';
+// export type IRole = Role.USER | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_GOD';
+// export type IRole = 'ROLE_USER' | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_GOD';
 type RoleType = {
-  key: IRole,
+  key: Role,
   label: string
 }
 const ROLE_USER: RoleType = {
-  key: 'ROLE_USER',
+  key: Role.USER,
   label: 'User'
 }
-const ROLE_MODERATOR: RoleType = {
-  key: 'ROLE_MODERATOR',
-  label: 'Moderator'
-}
 const ROLE_ADMIN: RoleType = {
-  key: 'ROLE_ADMIN',
+  key: Role.ADMIN,
   label: 'Admin',
 }
 const ROLE_GOD: RoleType = {
-  key: 'ROLE_GOD',
+  key: Role.GOD,
   label: 'God'
 }
 export const RoleTypes = {
   ROLE_USER: ROLE_USER,
-  ROLE_MODERATOR: ROLE_MODERATOR,
   ROLE_ADMIN: ROLE_ADMIN,
   ROLE_GOD: ROLE_GOD,
-  values: [ROLE_USER, ROLE_MODERATOR, ROLE_ADMIN, ROLE_GOD],
+  values: [ROLE_USER, ROLE_ADMIN, ROLE_GOD],
   valueOf: (key: string | undefined) => {
     return RoleTypes.values.find(value => value.key === key);
   }

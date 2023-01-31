@@ -4,9 +4,7 @@ import "./CssMenu.css"
 import { useEffect, useRef } from "react";
 import Link from 'next/link'
 import * as React from "react";
-import { EventBus } from "../eventbus/event-bus";
 import { MdMenu, MdChevronRight, MdOutlineAccountCircle, MdOutlineSettings, MdSupervisorAccount, MdHouse, MdFilterNone, MdOutlineLock } from "react-icons/md";
-import { User } from "@prisma/client";
 import { signIn, signOut, useSession } from "next-auth/react";
 
 
@@ -112,7 +110,7 @@ export const CssMenu = () => {
             <Link href='/colonyManagement' onClick={handleCloseMenu} className="link flex">
               <MdHouse className="no-events x-large mr-1" /> Colonies
             </Link>
-            <Link href='/userManagement' onClick={handleCloseMenu} className="link flex">
+            <Link href='/administration/users' onClick={handleCloseMenu} className="link flex">
               <MdSupervisorAccount className="no-events x-large mr-1" /> Users
             </Link>
           </div>

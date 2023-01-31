@@ -7,6 +7,7 @@
       "@/public/*": ["public/*"],
       "@/hooks/*": ["hooks/*"],
       "@/styles/*": ["styles/*"],
+      "@/types/*": ["types/*"],
       "@/services/*": ["services/*"]
     },
     "target": "es5",
