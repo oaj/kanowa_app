@@ -8,7 +8,7 @@ import {RoleTypes} from "@/types/user.type";
 import {Role} from "@prisma/client";
 import {getUserById, saveManagedUser} from "@/services/user.service";
 
-const UserEdit = async ({params}: { params: { userId: number } }) => {
+const UserEdit = ({params}: { params: { userId: number } }) => {
 
     const id = params.userId
     console.log('UserEdit.params.userId', params.userId)
@@ -23,27 +23,38 @@ const UserEdit = async ({params}: { params: { userId: number } }) => {
     //   role: Role,
     // };
 
-    const initialValues = useRef({
+    const [initialValues, setInitialValues] = useState({
         firstname: "",
         lastname: "",
         email: "",
         role: "" as Role,
     });
 
-    // useEffect(() => {
-    //     console.log('useEffect')
-    //     id && getUserById(id).then((response) => {
-    //         console.log('response', response)
-            // if (response.user) {
-            //     initialValues.current = {
-            //         firstName: response.user.firstname,
-            //         lastname: response.user.lastname,
-            //         email: response.user.email ? response.user.email : "",
-            //         role: response.user.role,
-            //     };
-            // }
-    //     });
-    // }, [id]);
+
+
+    useEffect( () => {
+        console.log('useEffect - -id', id)
+
+        async function getUser() {
+            id && await getUserById(id).then(async (response) => {
+                const data = await response.json();
+                console.log('data.user', data.user)
+                if (data.user) {
+                    setInitialValues({
+                        firstname: data.user.firstname,
+                        lastname: data.user.lastname,
+                        email: data.user.email ? data.user.email : "",
+                        role: data.user.role,
+                    });
+                }
+                console.log('initialValues - 1', initialValues)
+            });
+        }
+
+        console.log('initialValues - 2', initialValues)
+        getUser()
+        console.log('initialValues - 4', initialValues)
+    }, [id]);
 
     const validationSchema = Yup.object().shape({
         firstname: Yup.string()
@@ -104,11 +115,11 @@ const UserEdit = async ({params}: { params: { userId: number } }) => {
                 <div className="flex-row">
                     <div className="xx-large-text">{id ? "Edit" : "Create"}</div>
                     <div
-                        className="x-large-text">{initialValues.current.firstname} {initialValues.current.lastname} </div>
+                        className="x-large-text">{initialValues.firstname} {initialValues.lastname} </div>
                 </div>
                 <Formik
                     enableReinitialize
-                    initialValues={initialValues.current}
+                    initialValues={initialValues}
                     validationSchema={validationSchema}
                     onSubmit={handleSaveUser}
                 >

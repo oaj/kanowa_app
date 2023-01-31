@@ -2,17 +2,14 @@ import {Role} from "@prisma/client";
 
 const API_URL = "http://localhost:3000/api/user/";
 
-export const getUserById = (id: number) => {
+export const getUserById = async (id: number) => {
 
-  return fetch(API_URL + "user/" + id, {
+  return fetch(API_URL + id, {
     method: 'GET',
     headers: {
       'Content-type': 'Application/json',
     },
-  }).then((res) => {
-    console.log('users.get - res', res)
-
-  });
+  })
 };
 
 export const getUserByEmail = (email: string) => {
@@ -22,8 +19,8 @@ export const getUserByEmail = (email: string) => {
 };
 
 export const saveManagedUser = (id: number, firstname: string, lastname: string, email: string, role: Role) => {
-  return fetch(API_URL + 'systemCreate', {
-    method: 'POST',
+  return fetch(API_URL + (id ? id : ''), {
+    method: id ? 'PUT':'POST',
     headers: {
       'Content-type': 'Application/json',
     },
