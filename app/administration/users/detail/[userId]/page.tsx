@@ -15,12 +15,11 @@ const UserDetail = async ({params}: { params: { userId: number } }) => {
 
     return (
         user && (
-            <div>Hallo
+            <div>
                 <div className="info-panel">
                     <div className="content-box">
                         <div className="flex-row">
                             <div className="big-text spacer">{user.firstname + " " + user?.lastname}</div>
-                            <Link href={"edit/" + id} className="btn btn-outline-primary">Edit</Link>
                         </div>
                         <div className="detail-section">
                             <div>
