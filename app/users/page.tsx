@@ -1,12 +1,9 @@
 import React from 'react'
-import index from '@/lib/prisma';
-
+import {getUsers} from "@/lib/prisma/users";
 
 export default async function Users() {
 
-    const users = await index.user.findMany()
-
-    // console.log('users', users)
+    const {users} = await getUsers()
 
     return (
         <div>

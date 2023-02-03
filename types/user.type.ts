@@ -1,4 +1,5 @@
 import {Role} from "@prisma/client";
+
 export interface IUser {
   id: string | null,
   email: string,
@@ -47,6 +48,10 @@ type RoleType = {
   key: Role,
   label: string
 }
+const ROLE_NONE: RoleType = {
+  key: Role.NONE,
+  label: '----'
+}
 const ROLE_USER: RoleType = {
   key: Role.USER,
   label: 'User'
@@ -60,6 +65,7 @@ const ROLE_GOD: RoleType = {
   label: 'God'
 }
 export const RoleTypes = {
+  ROLE_NONE: ROLE_NONE,
   ROLE_USER: ROLE_USER,
   ROLE_ADMIN: ROLE_ADMIN,
   ROLE_GOD: ROLE_GOD,

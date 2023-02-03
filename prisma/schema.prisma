@@ -2,7 +2,7 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "index-client-js"
+  provider = "prisma-client-js"
 }
 
 datasource db {
@@ -12,8 +12,8 @@ datasource db {
 
 //------------------------------------
 //                Run after edit :
-//                pnpm index generate
-//                pnpm index db push
+//                npx prisma generate
+//                npx prisma db push
 //------------------------------------
 
 model User {
@@ -24,7 +24,7 @@ model User {
   lastname    String
   email       String?     @unique
   phone       String?
-  role        Role        @default(USER)
+  role        Role        @default(NONE)
   presidents  Colony[]    @relation("presidents")
   treasurers  Colony[]    @relation("treasurers")
   secretaries Colony[]    @relation("secretaries")
@@ -90,6 +90,7 @@ enum ColonyType {
 }
 
 enum Role {
+  NONE
   USER
   ADMIN
   GOD

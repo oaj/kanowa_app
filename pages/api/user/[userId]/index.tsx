@@ -39,6 +39,27 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
             },
         })
         return res.status(200).json({user: user})
+    } else if (req.method === "POST") {
+        const {id, firstname, lastname, email, role}:
+            { id: number, firstname: string, lastname: string, email: string, role: Role } = req.body
+
+        console.log('POST')
+        console.log('id', id)
+        console.log('firstname', firstname)
+        console.log('lastname', lastname)
+        console.log('email', email)
+        console.log('role', role)
+
+        // const user = await prisma.user.create({
+        //     data: {
+        //         firstname: firstname,
+        //         lastname: lastname,
+        //         email: email,
+        //         role: role,
+        //     },
+        // })
+        return res.status(200)
+        // return res.status(200).json({user: user})
     }
 }
 

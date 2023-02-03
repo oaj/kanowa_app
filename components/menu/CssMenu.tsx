@@ -107,7 +107,7 @@ export const CssMenu = () => {
         <div className="dropdown data-dropdown">
           <div className="link dropdown-button data-dropdown-button"><MdOutlineSettings className="no-events x-large mr-1" /> Administration<MdChevronRight className="no-events x-large" /></div>
           <div className="dropdown-menu">
-            <Link href='/colonyManagement' onClick={handleCloseMenu} className="link flex">
+            <Link href='/administration/colonies' onClick={handleCloseMenu} className="link flex">
               <MdHouse className="no-events x-large mr-1" /> Colonies
             </Link>
             <Link href='/administration/users' onClick={handleCloseMenu} className="link flex">

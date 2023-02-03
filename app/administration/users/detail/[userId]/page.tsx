@@ -65,7 +65,7 @@ const UserDetail = async ({params}: { params: { userId: number } }) => {
 
                 <div className="action-panel">
                     <BackButton/>
-                    <Link href={"administration/users/edit/" + id} className="btn btn-outline-light">Edit</Link>
+                    <Link href={"/administration/users/edit/" + id} className="btn btn-outline-light">Edit</Link>
                 </div>
             </div>
         )

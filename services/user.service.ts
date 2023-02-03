@@ -18,7 +18,10 @@ export const getUserByEmail = (email: string) => {
   return fetch(API_URL + "getByEmail/" + email);
 };
 
-export const saveManagedUser = (id: number, firstname: string, lastname: string, email: string, role: Role) => {
+export const saveManagedUser = (id: number | undefined, firstname: string, lastname: string, email: string, role: Role) => {
+  console.log('id', id)
+  console.log('id', !!id)
+
   return fetch(API_URL + (id ? id : ''), {
     method: id ? 'PUT':'POST',
     headers: {

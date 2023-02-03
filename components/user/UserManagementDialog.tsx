@@ -1,25 +1,34 @@
 "use client"
-import {useEffect, useRef, useState} from "react";
+import {useState} from "react";
 import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
-
 import "./UserManagementDialog.css"
 import {RoleTypes} from "@/types/user.type";
 import {Role, User} from "@prisma/client";
-import {getUserById, saveManagedUser} from "@/services/user.service";
+import {saveManagedUser} from "@/services/user.service";
 
-const UserEdit = ({user}: {user: User} ) => {
+const UserManagementDialog = ({user}: {user: User | null} ) => {
 
-    console.log('UserEdit.user', user)
-    const id = user.id
+    console.log('UserManagementDialog.user', user)
+    const id = user?.id
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
 
-    const initialValues = {
+    const initialValues: {
+        firstname: string,
+        lastname: string,
+        email: string,
+        role: Role,
+    } = user ? {
         firstname: user.firstname,
         lastname: user.lastname,
         email: user.email ? user.email :'',
         role: user.role,
+    } : {
+        firstname: '',
+        lastname: '',
+        email: '',
+        role: Role.NONE,
     };
 
     const validationSchema = Yup.object().shape({
@@ -51,9 +60,11 @@ const UserEdit = ({user}: {user: User} ) => {
 
         setLoading(true);
 
-        saveManagedUser(id, firstname, lastname, email, role).then(
-            () => {
-                window.history.back();
+        saveManagedUser(id, firstname, lastname, email, role).then(() => {
+                setTimeout(function () {
+                    window.history.back();
+                }, 100);
+                // todo hack, ellers når prisma ikke, at opdatere før listen af usere hentes på næste side ??
             },
             (error: any) => {
                 console.log('error', error);
@@ -163,4 +174,4 @@ const UserEdit = ({user}: {user: User} ) => {
         </div>
     );
 };
-export default UserEdit;
+export default UserManagementDialog;

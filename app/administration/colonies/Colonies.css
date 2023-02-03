@@ -1,0 +1,37 @@
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  margin-bottom: 0.5rem;
+}
+.title {
+  font-size: x-large;
+}
+.addIcon {
+  margin-right: 0.5rem;
+}
+.actionBar {
+  background-color: #eeeeee;
+  border: 2px #254441 solid;
+  color: black;
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  padding: 0.3rem 0.5rem;
+  align-items: center;
+  justify-content: center;
+}
+
+.actionBar .search-box {
+  border-radius: 1rem;
+}
+
+.actionButton {
+  border: 1px #eeeeee solid;
+  border-radius: 0.2rem;
+  padding: 0.2rem 1rem;
+}
+
+.colonies-tableRow {
+  grid-template-columns: 1fr 1fr 0.5fr 1fr 1fr 1fr 1fr;
+}

@@ -1,13 +1,12 @@
+import "server-only"
 import prisma from '.'
-import {User} from "@prisma/client";
 
 export async function getUsers() {
   try {
     const users = await prisma.user.findMany()
-    console.log('getUsers', users)
     return { users }
   } catch (error) {
-    return { error }
+    throw error
   }
 }
 
