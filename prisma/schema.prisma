@@ -22,7 +22,7 @@ model User {
   password    String?
   firstname   String
   lastname    String
-  email       String?     @unique
+  email       String      @unique
   phone       String?
   role        Role        @default(NONE)
   presidents  Colony[]    @relation("presidents")

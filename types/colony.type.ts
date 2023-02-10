@@ -1,5 +1,10 @@
 import {IUser} from "./user.type";
 import {IResidence} from "./residence.type";
+import {Colony, User, Residence} from "@prisma/client";
+import {ColonyType} from "@prisma/client";
+
+export type ColonyPlus = (Colony & { president: User, treasurer: User, secretary: User , residencies?: Residence[]})
+
 
 export interface IColony {
   id?: string,
@@ -36,24 +41,24 @@ export interface IColonyManagement {
   residences: IResidence[],
 }
 
-type ColonyType = {
-  key: string,
+type ColonyWebType = {
+  key: ColonyType,
   label: string
 }
-const HOUSES: ColonyType = {
-  key: 'HOUSES',
+const HOUSES: ColonyWebType = {
+  key: ColonyType.HOUSES,
   label: 'houses'
 }
-const APARTMENTS: ColonyType = {
-  key: 'APARTMENTS',
+const APARTMENTS: ColonyWebType = {
+  key: ColonyType.APARTMENTS,
   label: 'Apartments'
 }
-export const ColonyTypes = {
+export const ColonyWebTypes = {
   HOUSES: HOUSES,
   APARTMENTS: APARTMENTS,
   values: [HOUSES, APARTMENTS],
   valueOf: (key: string | undefined) => {
-    return ColonyTypes.values.find(value => value.key === key);
+    return ColonyWebTypes.values.find(value => value.key === key);
   }
 }
 

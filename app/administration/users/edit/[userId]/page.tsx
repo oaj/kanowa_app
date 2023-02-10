@@ -13,7 +13,7 @@ const UserEdit = async ({params}: { params: { userId: number } }) => {
     console.log('user:', user)
     return (
         user && (
-            <UserManagementDialog user={user}/>
+            <UserManagementDialog user={user} data-superjson/>
         ));
 };
 export default UserEdit;

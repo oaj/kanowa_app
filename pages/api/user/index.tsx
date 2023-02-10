@@ -1,13 +1,11 @@
-import {getUserById} from "@/lib/prisma/users";
 import {NextApiRequest, NextApiResponse} from "next";
-import {Role, User} from "@prisma/client";
+import {Role} from "@prisma/client";
 import prisma from "@/lib/prisma";
-import index from "@/lib/prisma";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
         try {
-            const users = await index.user.findMany()
+            const users = await prisma.user.findMany()
             res.status(200).json({users: users})
         } catch (error: any) {
             return res.status(500).json({error: error.message})

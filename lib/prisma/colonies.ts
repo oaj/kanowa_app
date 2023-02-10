@@ -1,16 +1,16 @@
-import "server-only"
 import prisma from '.'
+import {ColonyPlus} from "@/types/colony.type";
+
 
 export async function getColonies() {
     try {
-        const colonies = await prisma.colony.findMany({
+        const colonies: ColonyPlus[] = await prisma.colony.findMany({
             include: {
                 president: true,
                 treasurer: true,
                 secretary: true,
             }
         })
-        console.log('getColonies', colonies)
         return { colonies }
     } catch (error) {
         throw error
@@ -19,9 +19,14 @@ export async function getColonies() {
 
 export async function getColonyById(id: number) {
     try {
-        const colony = await prisma.colony.findUnique({
+        const colony: ColonyPlus | null = await prisma.colony.findUnique({
             where: { id: Number(id) },
-            // include: { tweets: true }
+            include: {
+                president: true,
+                treasurer: true,
+                secretary: true,
+                residencies: true,
+            }
         })
         return { colony }
     } catch (error) {

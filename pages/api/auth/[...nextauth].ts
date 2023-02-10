@@ -31,7 +31,7 @@ export const authOptions: NextAuthOptions = {
         
         if (username === 'oaj' && password === 'pass') {
             return {
-                name: 'Ole Jørgensen',
+                name: 'Ole Anker Jørgensen',
                 email: 'oaj@amfibia.dk'
             } as any
         }   

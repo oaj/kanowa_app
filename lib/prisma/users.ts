@@ -1,4 +1,3 @@
-import "server-only"
 import prisma from '.'
 
 export async function getUsers() {
@@ -23,7 +22,17 @@ export async function getUserById(id: number) {
   try {
     const user = await prisma.user.findUnique({
       where: { id: Number(id) },
-      // include: { tweets: true }
+    })
+    return { user }
+  } catch (error) {
+    return { error }
+  }
+}
+
+export async function getUserByEmail(email: string) {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { email: email },
     })
     return { user }
   } catch (error) {

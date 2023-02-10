@@ -1,10 +1,10 @@
 import {Role} from "@prisma/client";
 
 export interface IUser {
-  id: string | null,
+  id: number | null,
   email: string,
-  firstName: string,
-  lastName: string,
+  firstname: string,
+  lastname: string,
   phone: string | null,
 }
 
@@ -44,23 +44,23 @@ export interface IEditManagedUser {
 
 // export type IRole = Role.USER | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_GOD';
 // export type IRole = 'ROLE_USER' | 'ROLE_MODERATOR' | 'ROLE_ADMIN' | 'ROLE_GOD';
-type RoleType = {
+type RoleWebType = {
   key: Role,
   label: string
 }
-const ROLE_NONE: RoleType = {
+const ROLE_NONE: RoleWebType = {
   key: Role.NONE,
   label: '----'
 }
-const ROLE_USER: RoleType = {
+const ROLE_USER: RoleWebType = {
   key: Role.USER,
   label: 'User'
 }
-const ROLE_ADMIN: RoleType = {
+const ROLE_ADMIN: RoleWebType = {
   key: Role.ADMIN,
   label: 'Admin',
 }
-const ROLE_GOD: RoleType = {
+const ROLE_GOD: RoleWebType = {
   key: Role.GOD,
   label: 'God'
 }

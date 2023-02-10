@@ -13,13 +13,6 @@ const ColoniesPage = async () => {
     return (
         colonies && (<div>
                 <React.Fragment>
-                    <div className="header">
-                        <div className="title spacer">Colonies</div>
-                        <Link href="/administration/colonies/create" className="btn btn-outline-secondary">
-                            <MdAddBusiness className="addIcon xx-large no-events"/>
-                            New Colony
-                        </Link>
-                    </div>
                     <Colonies colonies={colonies} data-superjson/>
                 </React.Fragment>
             </div>

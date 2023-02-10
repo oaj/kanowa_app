@@ -2,10 +2,13 @@
 import * as React from 'react';
 import {ChangeEvent, useEffect, useState} from "react";
 import moment from 'moment';
-import "./Users.css"
 import {MdKeyboardArrowDown, MdKeyboardArrowUp, MdCancel, MdAddBusiness} from "react-icons/md";
 import Link from "next/link";
 import {User} from "@prisma/client";
+import {IconButton} from "@mui/material";
+import TableDataRow from "@/components/table/TableDataRow";
+import TableHeaderRow from "@/components/table/TableHeaderRow";
+import TableHeaderCell from "@/components/table/TableHeaderCell";
 
 type SortType = "name" | "username" | "created" | "active" | "email";
 
@@ -89,52 +92,66 @@ const Users = ({users}: { users: User[] }) => {
         setFilterText("")
     }
 
+    const styles = {
+        userColumns: "grid grid-cols-[1fr_0.6fr_1fr_0.5fr_1fr] gap-x-2 p-2",
+    }
+
     return (
         <div>
-            <div className="actionBar">
-                <div className="filler">Set filter:</div>
-                By Name <input className="search-box" autoFocus value={filterText} onChange={changeText}/>
-                <MdCancel className="filterCancelIcon larger" onClick={handleClearTextFilter}/>
+            <div className="">
+                <h2 className="text-center">Users</h2>
+                <Link href="/administration/users/create" className="">
+                    <IconButton aria-label="delete" size="medium">
+                        <MdAddBusiness className="mr-2 text-2xl pointer-events-none"/>
+                        New User
+                    </IconButton>
+                </Link>
+            </div>
+            <div className="bg-gray-800 flex gap-2 items-center px-4 py-2">
+                <div className="flex-1">Set filter:</div>
+                By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeText}/>
+                <MdCancel className="cursor-pointer text-xl" onClick={handleClearTextFilter}/>
             </div>
             <div>
-                <div className="users-tableRow tableRow tableHeader">
-                    <div className="tableHeaderSortCell" onClick={sortByName}>
+                <TableHeaderRow className={styles.userColumns}>
+                    <TableHeaderCell onClick={sortByName}>
                         Name
-                        {sort === "name" && (ascending ? <MdKeyboardArrowUp className="no-events"/> :
-                            <MdKeyboardArrowDown className="no-events"/>)}
-                    </div>
-                    <div className="tableHeaderSortCell" onClick={sortByUsername}>
+                        {sort === "name" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
+                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
+                    </TableHeaderCell>
+                    <TableHeaderCell onClick={sortByUsername}>
                         Username
-                        {sort === "username" && (ascending ? <MdKeyboardArrowUp className="no-events"/> :
-                            <MdKeyboardArrowDown className="no-events"/>)}
-                    </div>
-                    <div className="tableHeaderSortCell" onClick={sortByCreated}>
+                        {sort === "username" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
+                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
+                    </TableHeaderCell>
+                    <TableHeaderCell onClick={sortByCreated}>
                         Created
-                        {sort === "created" && (ascending ? <MdKeyboardArrowUp className="no-events"/> :
-                            <MdKeyboardArrowDown className="no-events"/>)}
-                    </div>
-                    <div className="tableHeaderSortCell" onClick={sortByActivated}>
+                        {sort === "created" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
+                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
+                    </TableHeaderCell>
+                    <TableHeaderCell onClick={sortByActivated}>
                         Active
-                        {sort === "active" && (ascending ? <MdKeyboardArrowUp className="no-events"/> :
-                            <MdKeyboardArrowDown className="no-events"/>)}
-                    </div>
-                    <div className="tableHeaderSortCell" onClick={sortByEmail}>
+                        {sort === "active" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
+                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
+                    </TableHeaderCell>
+                    <TableHeaderCell onClick={sortByEmail}>
                         Email
-                        {sort === "email" && (ascending ? <MdKeyboardArrowUp className="no-events"/> :
-                            <MdKeyboardArrowDown className="no-events"/>)}
-                    </div>
-                </div>
+                        {sort === "email" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
+                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
+                    </TableHeaderCell>
+                </TableHeaderRow>
                 {
                     filteredSortedUsers
                         .map((user) => (
-                            <Link href={"administration/users/detail/" + user.id}
-                                  className="users-tableRow tableRow tableData" key={user.id}>
+                            <TableDataRow href={"administration/users/detail/" + user.id}
+                            className={styles.userColumns}
+                            key={user.id.toString()}>
                                 <div>{user.firstname + " " + user.lastname}</div>
                                 <div>{user.username}</div>
                                 <div>{moment(user.createdAt).fromNow()}</div>
                                 <div>{user.active ? "Yes" : "No"}</div>
                                 <div>{user.email}</div>
-                            </Link>
+                            </TableDataRow>
                         ))
                 }
             </div>

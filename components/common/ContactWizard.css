@@ -1,0 +1,46 @@
+.tooltip {
+  font-size: larger;
+}
+.label {
+  font-weight: bold;
+  font-size: larger;
+}
+/*.flex-row {*/
+/*  display: flex;*/
+/*  gap: 0.5rem;*/
+/*  align-items: baseline;*/
+/*  !*margin-top: 0.5rem;*!*/
+/*  !*background-color: pink;*!*/
+/*}*/
+.inline-flex-row {
+  display: inline-flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  /*margin-top: 0.5rem;*/
+  /*background-color: pink;*/
+}
+.flex1 {
+  /*flex: 1;*/
+  flex-grow: 0;
+  flex-shrink: 1;
+}
+.flex-column {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+.rem-2-spacer {
+  min-width:2rem;
+}
+
+.item-grow {
+  flex-grow: 1;
+  text-align: center;
+}
+.larger {
+  font-size: larger;
+}
+.pink {
+  background-color: pink;
+}

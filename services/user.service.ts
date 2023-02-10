@@ -4,46 +4,53 @@ const API_URL = "http://localhost:3000/api/user/";
 
 export const getUserById = async (id: number) => {
 
-  return fetch(API_URL + id, {
-    method: 'GET',
-    headers: {
-      'Content-type': 'Application/json',
-    },
-  })
+    return fetch(API_URL + id, {
+        method: 'GET',
+        headers: {
+            'Content-type': 'Application/json',
+        },
+    })
 };
 
-export const getUserByEmail = (email: string) => {
-
-
-  return fetch(API_URL + "getByEmail/" + email);
+export const getUserByEmail = async (email: string) => {
+    return await fetch(API_URL + "getByEmail/" + email).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error(response.statusText);
+        }
+    }).catch(reason => {
+        console.log('reason', reason)
+        return Promise.reject(reason.message)
+    });
 };
 
 export const saveManagedUser = (id: number | undefined, firstname: string, lastname: string, email: string, role: Role) => {
-  console.log('id', id)
-  console.log('id', !!id)
+    console.log('id', id)
+    console.log('id', !!id)
 
-  return fetch(API_URL + (id ? id : ''), {
-    method: id ? 'PUT':'POST',
-    headers: {
-      'Content-type': 'Application/json',
-    },
-    body: JSON.stringify({
-      id: id,
-      firstname: firstname,
-      lastname: lastname,
-      email: email,
-      role: role
-    })
-  }).then(response => {
-    if (response.ok) {
-      return response.json();
-    } else {
-      throw new Error(response.statusText);
-    }
-  }).catch(reason => {
-    console.log('reason', reason)
-    return Promise.reject(reason.message)
-  });
+    return fetch(API_URL + (id ? id : ''), {
+        method: id ? 'PUT' : 'POST',
+        headers: {
+            'Content-type': 'Application/json',
+        },
+        body: JSON.stringify({
+            id: id,
+            firstname: firstname,
+            lastname: lastname,
+            email: email,
+            role: role
+        })
+    }).then(response => {
+        if (response.ok) {
+            return response.json();
+        } else {
+            throw new Error(response.statusText);
+        }
+    }).catch(reason => {
+        console.log('reason', reason)
+        return Promise.reject(reason.message)
+    });
 }
 
 // export const registerUser = (username: string, email: string, password: string, firstName: string, lastName: string, langKey: string) => {

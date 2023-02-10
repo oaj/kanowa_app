@@ -2,8 +2,7 @@ import "./UserManagementDetail.css"
 import {getUserById} from "@/lib/prisma/users";
 import moment from "moment";
 import Link from "next/link";
-import BackButton from "./BackButton";
-import {MdArrowBackIos} from "react-icons/md";
+import BackButton from "@/components/common/buttons/BackButton";
 
 const UserDetail = async ({params}: { params: { userId: number } }) => {
 

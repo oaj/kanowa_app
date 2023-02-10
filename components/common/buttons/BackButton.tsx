@@ -1,5 +1,6 @@
 "use client"
 import {MdArrowBackIos} from "react-icons/md";
+import {Button} from "@mui/material";
 
 const BackButton = () => {
     const handleBack = () => {
@@ -7,9 +8,11 @@ const BackButton = () => {
     }
 
     return (
-        <button className="btn btn-outline-light" onClick={handleBack}><MdArrowBackIos className="larger"/>Back
-    </button>
+        <Button onClick={handleBack} className="">
+            <MdArrowBackIos className="f larger"/>
+            Back
+        </Button>
 
-)
+    )
 }
 export default BackButton

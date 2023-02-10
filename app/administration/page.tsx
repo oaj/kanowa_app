@@ -3,7 +3,7 @@ import React from 'react'
 export default function Administration
 () {
   return (
-    <div>Administration
+    <div className="text">Administration
         
     </div>
   )
