@@ -10,7 +10,15 @@ import TableDataRow from "@/components/table/TableDataRow";
 import TableHeaderRow from "@/components/table/TableHeaderRow";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 
-type SortType = "name" | "username" | "created" | "active" | "email";
+export type SortType = "name" | "username" | "created" | "active" | "email";
+
+const sortFields = {
+    "name": (user: User) => user.firstname+user.lastname,
+    "username": (user: User) => user.username,
+    "created": (user: User) => user.createdAt,
+    "active": (user: User) => user.active,
+    "email": (user: User) => user.email,
+}
 
 const Users = ({users}: { users: User[] }) => {
 
@@ -21,62 +29,37 @@ const Users = ({users}: { users: User[] }) => {
 
     const [filterText, setFilterText] = useState<string>("");
 
-    const setSorting = (sort: SortType) => {
-        console.log(sort)
-        setSort(sort);
-        setAscending(!ascending);
+    const setSorting = (newSort: SortType) => {
+        console.log(newSort)
+        setAscending( newSort === sort ? !ascending : true);
+        setSort(newSort);
     }
 
     const number = (a: boolean) => {
         return a ? 1 : -1;
     }
 
-    const sortByName = () => {
-        setSorting("name")
-    }
-    const sortByUsername = () => {
-        setSorting("username")
-    }
-    const sortByEmail = () => {
-        setSorting("email")
-    }
-    const sortByCreated = () => {
-        setSorting("created")
-    }
-    const sortByActivated = () => {
-        setSorting("active")
+    const sorter = (a: User, b: User) => {
+        const valA = sortFields[sort](a)
+        const valB = sortFields[sort](b)
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return number(ascending) * valA.localeCompare(valB)
+        } else if (typeof valA === 'boolean' && typeof valB === 'boolean') {
+            return number(ascending) * (number(valB) - number(valA))
+        } else if (valA instanceof Date && valB instanceof Date) {
+            return number(ascending) * number((valA.valueOf() > valB.valueOf()))
+        } else if (typeof valA === 'number' && typeof valB === 'number') {
+            return number(ascending) * (valA - valB)
+        }
+        return 0;
     }
 
-    const changeText = (event: ChangeEvent) => {
+    const changeFilterText = (event: ChangeEvent) => {
         setFilterText((event.target as HTMLInputElement).value);
         console.log('filterText', filterText)
     }
 
     useEffect(() => {
-        const sorter = (a: User, b: User) => {
-            switch (sort) {
-                case "name": {
-                    const nameA = a.firstname + a.lastname;
-                    const nameB = b.firstname + b.lastname;
-                    return number(ascending) * nameA.localeCompare(nameB)
-                }
-                case "username": {
-                    if (!a.username || !b.username) return 0
-                    return number(ascending) * a.username.localeCompare(b.username)
-                }
-                case "email": {
-                    if (!a.email || !b.email) return 0
-                    return number(ascending) * a.email.localeCompare(b.email)
-                }
-                case "created": {
-                    return number(ascending) * number((a.createdAt.valueOf() > b.createdAt.valueOf()))
-                }
-                case "active": {
-                    return number(ascending) * (number(b.active) - number(a.active))
-                }
-            }
-            return 0;
-        }
 
         let fsUsers: User[] | [];
         fsUsers = users?.sort((a, b) => sorter(a, b))
@@ -109,36 +92,16 @@ const Users = ({users}: { users: User[] }) => {
             </div>
             <div className="bg-gray-800 flex gap-2 items-center px-4 py-2">
                 <div className="flex-1">Set filter:</div>
-                By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeText}/>
+                By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeFilterText}/>
                 <MdCancel className="cursor-pointer text-xl" onClick={handleClearTextFilter}/>
             </div>
             <div>
                 <TableHeaderRow className={styles.userColumns}>
-                    <TableHeaderCell onClick={sortByName}>
-                        Name
-                        {sort === "name" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell onClick={sortByUsername}>
-                        Username
-                        {sort === "username" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell onClick={sortByCreated}>
-                        Created
-                        {sort === "created" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell onClick={sortByActivated}>
-                        Active
-                        {sort === "active" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell onClick={sortByEmail}>
-                        Email
-                        {sort === "email" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
+                    <TableHeaderCell title="Name" sortKey="name" sort={sort} ascending={ascending} onClick={() => setSorting("name")} />
+                    <TableHeaderCell title="Username" sortKey="username" sort={sort} ascending={ascending} onClick={() => setSorting("username")} />
+                    <TableHeaderCell title="Created" sortKey="created" sort={sort} ascending={ascending} onClick={() => setSorting("created")} />
+                    <TableHeaderCell title="Active" sortKey="active" sort={sort} ascending={ascending} onClick={() => setSorting("active")} />
+                    <TableHeaderCell title="Email" sortKey="email" sort={sort} ascending={ascending} onClick={() => setSorting("email")} />
                 </TableHeaderRow>
                 {
                     filteredSortedUsers

@@ -1,5 +1,5 @@
 "use client"
-import {Colony} from "@prisma/client";
+import {Colony, User} from "@prisma/client";
 import {ChangeEvent, useEffect, useState} from "react";
 import {ColonyPlus, ColonyWebTypes} from "@/types/colony.type";
 import * as React from "react";
@@ -12,6 +12,12 @@ import TableHeaderCell from "@/components/table/TableHeaderCell";
 import TableDataRow from "@/components/table/TableDataRow";
 
 type SortType = "name" | "created" | "active" | "type";
+const sortFields = {
+    "name": (colony: Colony) => colony.name,
+    "created": (colony: Colony) => colony.createdAt,
+    "active": (colony: Colony) => colony.active,
+    "type": (colony: Colony) => colony.type,
+}
 
 const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
     const [filteredSortedColonies, setFilteredSortedColonies] = useState<ColonyPlus[]>([]);
@@ -19,70 +25,53 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
     const [sort, setSort] = useState<SortType>("created");
     const [ascending, setAscending] = useState<boolean>(true);
 
-    const [filterName, setFilterName] = useState<string>("");
+    const [filterText, setFilterText] = useState<string>("");
 
-    const setSorting = (sort: SortType) => {
-        console.log(sort)
-        setSort(sort);
-        setAscending(!ascending);
+    const setSorting = (newSort: SortType) => {
+        console.log(newSort)
+        setAscending( newSort === sort ? !ascending : true);
+        setSort(newSort);
     }
 
     const number = (a: boolean) => {
         return a ? 1 : -1;
     }
 
-    const sortByName = () => {
-        setSorting("name")
-    }
-    const sortByCreated = () => {
-        setSorting("created")
-    }
-    const sortByActive = () => {
-        setSorting("active")
-    }
-    const sortByType = () => {
-        setSorting("type")
+    const sorter = (a: Colony, b: Colony) => {
+        const valA = sortFields[sort](a)
+        const valB = sortFields[sort](b)
+        if (typeof valA === 'string' && typeof valB === 'string') {
+            return number(ascending) * valA.localeCompare(valB)
+        } else if (typeof valA === 'boolean' && typeof valB === 'boolean') {
+            return number(ascending) * (number(valB) - number(valA))
+        } else if (valA instanceof Date && valB instanceof Date) {
+            return number(ascending) * number((valA.valueOf() > valB.valueOf()))
+        } else if (typeof valA === 'number' && typeof valB === 'number') {
+            return number(ascending) * (valA - valB)
+        }
+        return 0;
     }
 
-    const changeName = (event: ChangeEvent) => {
-        setFilterName((event.target as HTMLInputElement).value);
-        console.log('filterName', filterName)
+    const changeFilterText = (event: ChangeEvent) => {
+        setFilterText((event.target as HTMLInputElement).value);
+        console.log('filterText', filterText)
     }
 
     useEffect(() => {
-        const sorter = (a: Colony, b: Colony) => {
-            switch (sort) {
-                case "name": {
-                    return number(ascending) * a.name.localeCompare(b.name)
-                }
-                case "created": {
-                    return number(ascending) * number((a.createdAt.valueOf() > b.createdAt.valueOf()))
-                }
-                case "active": {
-                    return number(ascending) * (number(b.active) - number(a.active))
-                }
-                case "type": {
-                    if (a.type === null || b.type === null) return 0;
-                    return number(ascending) * a.type.localeCompare(b.type)
-                }
-            }
-            return 0;
-        }
 
         let fsColonies: ColonyPlus[] | null;
         fsColonies = colonies?.sort((a, b) => sorter(a, b))
-            .filter(colony => filterName ? (colony.name.toLowerCase().includes(filterName.toLowerCase())) : true);
+            .filter(colony => filterText ? (colony.name.toLowerCase().includes(filterText.toLowerCase())) : true);
         setFilteredSortedColonies(fsColonies)
 
-    }, [colonies, ascending, sort, filterName])
+    }, [colonies, ascending, sort, filterText])
 
     const handleClearNameFilter = () => {
-        setFilterName("")
+        setFilterText("")
     }
 
     const styles = {
         colonyColumns: "grid grid-cols-[1fr_1fr_0.5fr_1fr_1fr_1fr_1fr_0.2fr] gap-x-2 p-2",
-        tableHeaderSortCell: "flex items-center hover:font-bold hover:cursor-pointer",
     }
 
     return (
@@ -98,35 +87,19 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
             </div>
             <div className="bg-gray-800 flex gap-2 items-center px-4 py-2">
                 <div className="flex-1">Set filter:</div>
-                By Name <input className="rounded-2xl" autoFocus value={filterName} onChange={changeName}/>
+                By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeFilterText}/>
                 <MdCancel className="cursor-pointer text-xl" onClick={handleClearNameFilter}/>
             </div>
             <div>
                 <TableHeaderRow className={styles.colonyColumns}>
-                    <TableHeaderCell onClick={sortByName}>
-                        Name
-                        {sort === "name" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell onClick={sortByCreated}>
-                        Created
-                        {sort === "created" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell onClick={sortByActive}>
-                        Active
-                        {sort === "active" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell>President</TableHeaderCell>
-                    <TableHeaderCell>Treasurer</TableHeaderCell>
-                    <TableHeaderCell>Secretary</TableHeaderCell>
-                    <TableHeaderCell onClick={sortByType}>
-                        Type
-                        {sort === "type" && (ascending ? <MdKeyboardArrowUp className="pointer-events-none"/> :
-                            <MdKeyboardArrowDown className="pointer-events-none"/>)}
-                    </TableHeaderCell>
-                    <TableHeaderCell className="text-right"></TableHeaderCell>
+                    <TableHeaderCell title="Name" sortKey="name" sort={sort} ascending={ascending} onClick={() => setSorting("name")} />
+                    <TableHeaderCell title="Created" sortKey="created" sort={sort} ascending={ascending} onClick={() => setSorting("created")} />
+                    <TableHeaderCell title="Active" sortKey="active" sort={sort} ascending={ascending} onClick={() => setSorting("active")} />
+                    <TableHeaderCell title="President"/>
+                    <TableHeaderCell title="Treasurer"/>
+                    <TableHeaderCell title="Secretary"/>
+                    <TableHeaderCell title="Type" sortKey="type" sort={sort} ascending={ascending} onClick={() => setSorting("type")} />
+                    <TableHeaderCell className="text-right"/>
                 </TableHeaderRow>
                 {
                     filteredSortedColonies
