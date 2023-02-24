@@ -3,14 +3,16 @@ import {ColonyPlus} from "@/types/colony.type";
 
 
 export async function getColonies() {
+    console.log('getColonies', getColonies)
     try {
-        const colonies: ColonyPlus[] = await prisma.colony.findMany({
+        const colonies = await prisma.colony.findMany({
             include: {
                 president: true,
                 treasurer: true,
                 secretary: true,
             }
         })
+        console.log('getColonies - colonies', colonies)
         return { colonies }
     } catch (error) {
         throw error
@@ -19,7 +21,7 @@ export async function getColonies() {
 
 export async function getColonyById(id: number) {
     try {
-        const colony: ColonyPlus | null = await prisma.colony.findUnique({
+        const colony = await prisma.colony.findUnique({
             where: { id: Number(id) },
             include: {
                 president: true,

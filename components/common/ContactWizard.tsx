@@ -6,7 +6,6 @@ import {
     DialogContent,
     DialogTitle, IconButton, Tooltip,
 } from "@mui/material";
-import DeleteIcon from '@mui/icons-material/Delete';
 
 import {MdEmail} from "react-icons/md";
 import {MdPhoneAndroid} from "react-icons/md";
@@ -19,7 +18,7 @@ import {ErrorMessage, Field, Form, Formik} from "formik";
 import * as Yup from "yup";
 import {getUserByEmail} from "@/services/user.service";
 import {IUser} from "@/types/user.type";
-import "./ContactWizard.css"
+// import "./ContactWizard.css"
 
 type ContactState = {
     nameRequired: boolean,
@@ -307,7 +306,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
     }
 
     return (
-        <div style={{backgroundColor:"dimgrey"}}>
+        <div className="border border-color-gray-500 border-solid rounded-md p-2">
             <div className="flex-row">
                 <div className="label spacer">{fieldName}</div>
                 <div>{user.firstname + " " + user.lastname}</div>
@@ -330,7 +329,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                 <div className="grow"/>
                 <Tooltip title="Remove" placement="top-start" className={`flex-none larger ${user.firstname === "" ? "collapse" : "visible"}`}>
                     <IconButton>
-                        <MdHighlightOff onClick={handleRemove}/>
+                        <MdHighlightOff className="larger" onClick={handleRemove}/>
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Edit" placement="top-end" className="shrink">
@@ -361,9 +360,6 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                                     <div>
                                         <p>Please, to remove the contact, click the button below.</p>
                                         <div className="flex-row">
-                                            {/*<Button iconRight={<CameraIcon fill="currentColor" />}>*/}
-                                            {/*    Take a photo*/}
-                                            {/*</Button>*/}
                                             <div className="spacer">
                                                 <Button onClick={handleCancel}>
                                                     Cancel

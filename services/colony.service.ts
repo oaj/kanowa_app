@@ -1,4 +1,5 @@
 import {IUser} from "@/types/user.type";
+import {setColonyRoleNotificationsSuspended} from "@/services/command.service";
 
 const API_URL = "http://localhost:3000/api/colony/";
 
@@ -34,26 +35,36 @@ const API_URL = "http://localhost:3000/api/colony/";
 export const saveColony = async (
     id: number,
     name: string,
+    address: string,
+    nearBy: string,
+    city: string,
+    roleNotificationsSuspended: boolean,
     active: boolean,
     type: string,
     president: IUser | null,
     treasurer: IUser | null,
     secretary: IUser | null
 ) => {
-  // Here the users are checked to see if they are empty and should be set to null
-  president = isUserEmpty(president) ? null : president;
-  treasurer = isUserEmpty(treasurer) ? null : treasurer;
-  secretary = isUserEmpty(secretary) ? null : secretary;
+    // Here the users are checked to see if they are empty and should be set to null
+    president = isUserEmpty(president) ? null : president;
+    treasurer = isUserEmpty(treasurer) ? null : treasurer;
+    secretary = isUserEmpty(secretary) ? null : secretary;
 
 
     return fetch(API_URL + (id ? id : ''), {
-        method: id ? 'PUT':'POST',
+        method: id ? 'PUT' : 'POST',
         headers: {
             'Content-type': 'Application/json',
         },
         body: JSON.stringify({
             id: id,
             name: name,
+
+            address: address,
+            nearBy: nearBy,
+            city: city,
+            roleNotificationsSuspended: roleNotificationsSuspended,
+
             active: active,
             type: type,
             president: president,
@@ -71,29 +82,27 @@ export const saveColony = async (
         return Promise.reject(reason.message)
     });
 
-  // const colony = await getById(id).then(response => {
-  //   let col = response.data;
-  //   console.log('colony from db', col);
-  //
-  //   col.name = name;
-  //   col.active = active;
-  //   col.type = type;
-  //   col.president = president;
-  //   col.treasurer = treasurer;
-  //   col.secretary = secretary;
-  //   console.log('colony to save', col);
-  //   return col;
-  // });
-  // return axiosInstance.put(API_URL + "manage-colonies", colony, {headers: authHeader()})
-  //     .then(response => fixOne(response));
+    // const colony = await getById(id).then(response => {
+    //   let col = response.data;
+    //   console.log('colony from db', col);
+    //
+    //   col.name = name;
+    //   col.active = active;
+    //   col.type = type;
+    //   col.president = president;
+    //   col.treasurer = treasurer;
+    //   col.secretary = secretary;
+    //   console.log('colony to save', col);
+    //   return col;
+    // });
+    // return axiosInstance.put(API_URL + "manage-colonies", colony, {headers: authHeader()})
+    //     .then(response => fixOne(response));
 };
 
 const isUserEmpty = (user: IUser | null) => {
-  if (!user) return true;
-  return !(user.id || user.email || user.firstname || user.lastname || user.phone);
+    if (!user) return true;
+    return !(user.id || user.email || user.firstname || user.lastname || user.phone);
 }
-
-
 
 
 //  replace string dates with Date Object
@@ -114,30 +123,36 @@ const isUserEmpty = (user: IUser | null) => {
 //   return response;
 // }
 
-// export const registerColony = async (
-//   name: string,
-//   addressLine1: string,
-//   addressLine2: string,
-//   addressLine3: string,
-//   nearBy: string,
-//   city: string,
-//   firstname: string,
-//   lastname: string,
-//   email: string
-// ) => {
-//   return axiosInstance.post(API_URL + "register_colony", {
-//     name,
-//     addressLine1,
-//     addressLine2,
-//     addressLine3,
-//     nearBy,
-//     city,
-//     firstname,
-//     lastname,
-//     email
-//   }, {headers: authHeader()})
-//     .then((response) => fixOne(response));
-// };
+export const registerColony = async (
+    name: string,
+    address: string,
+    nearBy: string,
+    city: string,
+    firstname: string,
+    lastname: string,
+    email: string
+) => {
+
+    return await fetch(API_URL, {
+        method: 'POST',
+        headers: {
+            'Content-type': 'Application/json',
+        },
+        body: JSON.stringify({
+            name,
+            address,
+            nearBy,
+            city,
+            firstname,
+            lastname,
+            email
+        })
+    }).then(async response => {
+        const data = await response.json()
+        if (response.ok) return {data: data}
+        else return {error: data}
+    })
+};
 
 
 // export const getAllColonies = () => {

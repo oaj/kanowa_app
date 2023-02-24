@@ -78,7 +78,7 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
         <div>
             <div className="">
                 <h2 className="text-center">Colonies</h2>
-                <Link href="/administration/colonies/create" className="btn btn-outline-secondary">
+                <Link href="/administration/colonies/create" className="">
                     <IconButton aria-label="delete" size="medium">
                         <MdAddBusiness className="addIcon xx-large no-events"/>
                         New Colony

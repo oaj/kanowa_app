@@ -2,7 +2,7 @@
 import * as React from 'react';
 import {ChangeEvent, useEffect, useState} from "react";
 import moment from 'moment';
-import {MdKeyboardArrowDown, MdKeyboardArrowUp, MdCancel, MdAddBusiness} from "react-icons/md";
+import {MdKeyboardArrowDown, MdKeyboardArrowUp, MdCancel, MdAddBusiness, MdEdit} from "react-icons/md";
 import Link from "next/link";
 import {User} from "@prisma/client";
 import {IconButton} from "@mui/material";
@@ -76,7 +76,7 @@ const Users = ({users}: { users: User[] }) => {
     }
 
     const styles = {
-        userColumns: "grid grid-cols-[1fr_0.6fr_1fr_0.5fr_1fr] gap-x-2 p-2",
+        userColumns: "grid grid-cols-[1fr_0.6fr_1fr_0.5fr_1fr_0.2fr] gap-x-2 p-2",
     }
 
     return (
@@ -102,6 +102,7 @@ const Users = ({users}: { users: User[] }) => {
                     <TableHeaderCell title="Created" sortKey="created" sort={sort} ascending={ascending} onClick={() => setSorting("created")} />
                     <TableHeaderCell title="Active" sortKey="active" sort={sort} ascending={ascending} onClick={() => setSorting("active")} />
                     <TableHeaderCell title="Email" sortKey="email" sort={sort} ascending={ascending} onClick={() => setSorting("email")} />
+                    <TableHeaderCell className="text-right"/>
                 </TableHeaderRow>
                 {
                     filteredSortedUsers
@@ -114,6 +115,12 @@ const Users = ({users}: { users: User[] }) => {
                                 <div>{moment(user.createdAt).fromNow()}</div>
                                 <div>{user.active ? "Yes" : "No"}</div>
                                 <div>{user.email}</div>
+                                <Link href={"/administration/users/edit/" + user.id} passHref
+                                      className="text-right">
+                                    <IconButton size="small" title="Edit">
+                                        <MdEdit fontSize="inherit" className="fill-current group-hover:fill-gray-800"/>
+                                    </IconButton>
+                                </Link>
                             </TableDataRow>
                         ))
                 }

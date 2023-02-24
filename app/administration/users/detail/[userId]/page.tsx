@@ -17,8 +17,9 @@ const UserDetail = async ({params}: { params: { userId: number } }) => {
             <div>
                 <div className="info-panel">
                     <div className="content-box">
-                        <div className="flex-row">
-                            <div className="big-text spacer">{user.firstname + " " + user?.lastname}</div>
+                        <div className="flex flex-row gap-2 items-baseline">
+                            <div className="big-text">{user.firstname + " " + user?.lastname}</div>
+                            {user?.role}
                         </div>
                         <div className="detail-section">
                             <div>
@@ -64,7 +65,6 @@ const UserDetail = async ({params}: { params: { userId: number } }) => {
 
                 <div className="action-panel">
                     <BackButton/>
-                    <Link href={"/administration/users/edit/" + id} className="btn btn-outline-light">Edit</Link>
                 </div>
             </div>
         )

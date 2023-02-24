@@ -7,19 +7,23 @@ import { ReactNode } from 'react';
 import { darkTheme } from "./theme/themes";
 import { ThemeProvider, CssBaseline } from "@mui/material";
 
-interface IProps { 
+interface IProps {
   children: ReactNode,
 }
 
 export default function RootLayout({ children }: IProps) {
   return (
-    <html lang="en">
-    <body>
+    <html className="h-screen" lang="en">
+    <body className="">
         <SessionProvider>
-          <Header />
             <ThemeProvider theme={darkTheme}>
                 <CssBaseline />
-                <>{children}</>
+                <Header />
+                <div className="max-w-full flex justify-center grid-cols-1">
+                    <div className="max-w-7xl border-1">
+                    {children}
+                    </div>
+                </div>
             </ThemeProvider>
         </SessionProvider>
       </body>

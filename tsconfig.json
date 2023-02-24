@@ -8,7 +8,8 @@
       "@/hooks/*": ["hooks/*"],
       "@/styles/*": ["styles/*"],
       "@/types/*": ["types/*"],
-      "@/services/*": ["services/*"]
+      "@/services/*": ["services/*"],
+      "@/emails/*": ["emails/*"]
     },
     "target": "es5",
     "lib": [

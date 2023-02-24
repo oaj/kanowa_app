@@ -2,12 +2,13 @@
 import {useState} from "react";
 import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
-import "./UserManagementDialog.css"
 import {RoleTypes} from "@/types/user.type";
 import {Role, User} from "@prisma/client";
 import {saveManagedUser} from "@/services/user.service";
+import {Button} from "@mui/material";
+import revalidateUrl from "@/services/revalidate.service";
 
-const UserManagementDialog = ({user}: {user: User | null} ) => {
+const UserManagementDialog = ({user}: { user: User | null }) => {
 
     console.log('UserManagementDialog.user', user)
     const id = user?.id
@@ -22,7 +23,7 @@ const UserManagementDialog = ({user}: {user: User | null} ) => {
     } = user ? {
         firstname: user.firstname,
         lastname: user.lastname,
-        email: user.email ? user.email :'',
+        email: user.email ? user.email : '',
         role: user.role,
     } : {
         firstname: '',
@@ -61,10 +62,12 @@ const UserManagementDialog = ({user}: {user: User | null} ) => {
         setLoading(true);
 
         saveManagedUser(id, firstname, lastname, email, role).then(() => {
-                setTimeout(function () {
-                    window.history.back();
-                }, 100);
-                // todo hack, ellers når prisma ikke, at opdatere før listen af usere hentes på næste side ??
+                // revalidateUrl('/administration/users/').then(value => {
+                //         console.log(value)
+                //         window.history.back()
+                //     }
+                // )
+                window.history.back()
             },
             (error: any) => {
                 console.log('error', error);
@@ -87,12 +90,10 @@ const UserManagementDialog = ({user}: {user: User | null} ) => {
     }
 
     return (
-        <div className="col-xl-12">
-            <div className="card card-container">
+            <div className="p-2">
                 <div className="flex-row">
-                    <div className="xx-large-text">{id ? "Edit" : "Create"}</div>
-                    <div
-                        className="x-large-text">{initialValues.firstname} {initialValues.lastname} </div>
+                    <div className="text-2xl">{id ? "Edit" : "Create"}</div>
+                    <div className="text-xl">{initialValues.firstname} {initialValues.lastname} </div>
                 </div>
                 <Formik
                     enableReinitialize
@@ -101,77 +102,81 @@ const UserManagementDialog = ({user}: {user: User | null} ) => {
                     onSubmit={handleSaveUser}
                 >
                     <Form>
-                        <div className="form-group">
-                            <label htmlFor="firstname">First Name</label>
-                            <Field name="firstname" type="text" className="form-control"/>
-                            <ErrorMessage
-                                name="firstname"
-                                component="div"
-                                className="alert alert-danger"
-                            />
-                            <label htmlFor="lastname">Last Name</label>
-                            <Field name="lastname" type="text" className="form-control"/>
-                            <ErrorMessage
-                                name="lastname"
-                                component="div"
-                                className="alert alert-danger"
-                            />
-                        </div>
-                        <label htmlFor="email">Email</label>
-                        <Field name="email" type="text" className="form-control"/>
-                        <ErrorMessage
-                            name="email"
-                            component="div"
-                            className="alert alert-danger"
-                        />
+                        <div className="flex flex-col gap-4 pt-4">
+                            <div className="flex flex-col gap-2">
+                                <div className="flex flex-col">
+                                    <label htmlFor="firstname">First Name</label>
+                                    <Field name="firstname" type="text" className="form-control"/>
+                                    <ErrorMessage
+                                        name="firstname"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label htmlFor="lastname">Last Name</label>
+                                    <Field name="lastname" type="text" className="form-control"/>
+                                    <ErrorMessage
+                                        name="lastname"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                                <div className="flex flex-col">
+                                    <label htmlFor="email">Email</label>
+                                    <Field name="email" type="text" className="form-control"/>
+                                    <ErrorMessage
+                                        name="email"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
 
-                        <label htmlFor="role">Role</label>
-                        <Field
-                            name="role"
-                            as="select"
-                            options={RoleTypes.values}
-                            className="custom-select"
-                            placeholder="Select a role..."
-                        >
-                            <option value="">Select a role</option>
-                            {RoleTypes.values.filter(value => value !== RoleTypes.ROLE_USER).map((type) => {
-                                return (
-                                    <option key={type.key} value={type.key}>{type.label}</option>
-                                )
-                            })}
-                        </Field>
-                        <ErrorMessage
-                            name="role"
-                            component="div"
-                            className="alert alert-danger"
-                        />
-                        <div className="vert-space2"/>
-                        <div className="form-group">
-                            <div className="flex-row">
-                                <button type="button" className="btn btn-outline-danger" disabled={loading}
+                                </div>
+                                <div className="flex flex-col">
+                                    <label htmlFor="role">Role</label>
+                                    <Field
+                                        name="role"
+                                        as="select"
+                                        options={RoleTypes.values}
+                                        className="custom-select"
+                                        placeholder="Select a role..."
+                                    >
+                                        <option value="">Select a role</option>
+                                        {RoleTypes.values.filter(value => value !== RoleTypes.ROLE_USER).map((type) => {
+                                            return (
+                                                <option key={type.key} value={type.key}>{type.label}</option>
+                                            )
+                                        })}
+                                    </Field>
+                                    <ErrorMessage
+                                        name="role"
+                                        component="div"
+                                        className="alert alert-danger"
+                                    />
+                                </div>
+                            </div>
+                            <div className="flex place-content-between gap-2">
+                                <Button type="button" color="warning" disabled={loading}
                                         onClick={handleCancel}>
                                     Cancel
-                                </button>
-                                <button type="submit" className="btn btn-outline-primary" disabled={loading}>
+                                </Button>
+                                <Button type="submit" color="primary" disabled={loading}>
                                     {loading && (
                                         <span className="spinner-border spinner-border-sm"/>
                                     )}
                                     {id ? "Save" : "Create"}
-                                </button>
+                                </Button>
                             </div>
-                        </div>
 
-                        {message && (
-                            <div className="form-group">
+                            {message && (
                                 <div className="alert alert-danger" role="alert">
                                     {message}
                                 </div>
-                            </div>
-                        )}
+                            )}
+                        </div>
                     </Form>
                 </Formik>
             </div>
-        </div>
     );
 };
 export default UserManagementDialog;

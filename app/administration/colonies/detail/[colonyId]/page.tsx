@@ -99,7 +99,6 @@ colony && (
       </div>
       <div className="action-panel">
         <BackButton/>
-        <Link href={"/administration/colonies/edit/" + id} className="btn btn-outline-light">Edit</Link>
       </div>
     </div>
   ))

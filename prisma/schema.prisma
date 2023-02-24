@@ -14,51 +14,62 @@ datasource db {
 //                Run after edit :
 //                npx prisma generate
 //                npx prisma db push
+//                restart ide
 //------------------------------------
 
 model User {
-  id          Int         @id @default(autoincrement())
-  username    String?     @unique
-  password    String?
-  firstname   String
-  lastname    String
-  email       String      @unique
-  phone       String?
-  role        Role        @default(NONE)
-  presidents  Colony[]    @relation("presidents")
-  treasurers  Colony[]    @relation("treasurers")
-  secretaries Colony[]    @relation("secretaries")
-  owners      Residence[] @relation("owners")
-  tenants     Residence[] @relation("tenants")
-  responsible Residence[] @relation("responsibles")
-  active      Boolean     @default(false)
-  blocked     Boolean     @default(false)
-  imageUrl    String?
-  langKey     LangKey     @default(ES)
-  createdAt   DateTime    @default(now())
-  updatedAt   DateTime    @updatedAt
+  id                Int         @id @default(autoincrement())
+  username          String?     @unique
+  password          String?
+  firstname         String
+  lastname          String
+  email             String      @unique
+  phone             String?
+  role              Role        @default(NONE)
+  presidents        Colony[]    @relation("presidents")
+  treasurers        Colony[]    @relation("treasurers")
+  secretaries       Colony[]    @relation("secretaries")
+  formerPresidents  Colony[]    @relation("formerPresidents")
+  formerTreasurers  Colony[]    @relation("formerTreasurers")
+  formerSecretaries Colony[]    @relation("formerSecretaries")
+  owners            Residence[] @relation("owners")
+  tenants           Residence[] @relation("tenants")
+  responsible       Residence[] @relation("responsibles")
+  active            Boolean     @default(false)
+  blocked           Boolean     @default(false)
+  imageUrl          String?
+  langKey           LangKey     @default(ES)
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
 }
 
 model Colony {
-  id                         Int            @id @default(autoincrement())
-  name                       String
-  createdAt                  DateTime       @default(now())
-  updatedAt                  DateTime       @updatedAt
-  active                     Boolean        @default(false)
-  deleted                    Boolean        @default(false)
-  address                    String
-  nearBy                     String
-  city                       String
-  type                       ColonyType
-  roleNotificationsSuspended Boolean        @default(false)
-  president                  User           @relation("presidents", fields: [presidentId], references: [id])
-  presidentId                Int
-  treasurer                  User           @relation("treasurers", fields: [treasurerId], references: [id])
-  treasurerId                Int
-  secretary                  User           @relation("secretaries", fields: [secretaryId], references: [id])
-  secretaryId                Int
-  residencies                Residence[]
-  residenceTags              ResidenceTag[]
+  id                                    Int            @id @default(autoincrement())
+  name                                  String
+  createdAt                             DateTime       @default(now())
+  updatedAt                             DateTime       @updatedAt
+  active                                Boolean        @default(false)
+  deleted                               Boolean        @default(false)
+  address                               String
+  nearBy                                String
+  city                                  String
+  type                                  ColonyType?
+  roleNotificationsSuspended            Boolean        @default(false)
+  savedDuringRoleNotificationsSuspended Boolean        @default(false)
+  formerPresident                       User?           @relation("formerPresidents", fields: [formerPresidentId], references: [id])
+  formerPresidentId                     Int?
+  formerTreasurer                       User?          @relation("formerTreasurers", fields: [formerTreasurerId], references: [id])
+  formerTreasurerId                     Int?
+  formerSecretary                       User?          @relation("formerSecretaries", fields: [formerSecretaryId], references: [id])
+  formerSecretaryId                     Int?
+  president                             User           @relation("presidents", fields: [presidentId], references: [id])
+  presidentId                           Int
+  treasurer                             User?          @relation("treasurers", fields: [treasurerId], references: [id])
+  treasurerId                           Int?
+  secretary                             User?          @relation("secretaries", fields: [secretaryId], references: [id])
+  secretaryId                           Int?
+  residencies                           Residence[]
+  residenceTags                         ResidenceTag[]
 }
 
 model Residence {
@@ -99,4 +110,19 @@ enum Role {
 enum LangKey {
   EN
   ES
+}
+
+// ----------------------------------------------------------
+model Userr {
+  id      Int      @id @default(autoincrement())
+  email   String   @unique
+  name    String
+  profile Profile?
+}
+
+model Profile {
+  id     Int    @id @default(autoincrement())
+  bio    String
+  user   Userr  @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int    @unique
 }
