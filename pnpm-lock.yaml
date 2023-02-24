@@ -6,6 +6,7 @@ specifiers:
   '@emotion/styled': ^11.10.5
   '@mui/icons-material': ^5.11.0
   '@mui/material': ^5.11.7
+  '@next/font': ^13.2.1
   '@prisma/client': ^4.10.1
   '@react-email/container': 0.0.7
   '@react-email/html': 0.0.4
@@ -19,7 +20,6 @@ specifiers:
   autoprefixer: ^10.4.13
   eslint: 8.31.0
   eslint-config-next: 13.2.1
-  font@latest: link:next/font@latest
   formik: ^2.2.9
   i18next: ^22.4.10
   moment: ^2.29.4
@@ -51,6 +51,7 @@ dependencies:
   '@emotion/styled': 11.10.5_jp5djshq6aqfasno3mth3hguci
   '@mui/icons-material': 5.11.0_6qoy6f6d6nax4kxrhs633za6sa
   '@mui/material': 5.11.7_lskpmcsdi7ipu6qpuapyu56ihm
+  '@next/font': 13.2.1
   '@prisma/client': 4.10.1_prisma@4.10.1
   '@react-email/container': 0.0.7
   '@react-email/html': 0.0.4
@@ -61,7 +62,6 @@ dependencies:
   '@types/react-dom': 18.0.10
   eslint: 8.31.0
   eslint-config-next: 13.2.1_iukboom6ndih5an6iafl45j2fe
-  font@latest: link:next/font@latest
   formik: 2.2.9_react@18.2.0
   i18next: 22.4.10
   moment: 2.29.4
@@ -917,6 +917,10 @@ packages:
     resolution: {integrity: sha512-r0i5rcO6SMAZtqiGarUVMr3k256X0R0j6pEkKg4PxqUW+hG0qgMxRVAJsuoRG5OBFkCOlSfWZJ0mP9fQdCcyNg==}
     dependencies:
       glob: 7.1.7
+    dev: false
+
+  /@next/font/13.2.1:
+    resolution: {integrity: sha512-4sergLt7xp9+mZuKME/xM4tLlHGTcmL7naCq0qCTcAlof6NnttshYgiLOdhSiy0NcI+/yM3BjvdEk++O96UzTg==}
     dev: false
 
   /@next/swc-android-arm-eabi/13.1.2:
