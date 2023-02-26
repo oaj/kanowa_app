@@ -1,8 +1,19 @@
 import prisma from '.'
+import {IUser} from "@/types/user.type";
 
+// Used to select individual data in a select
+export const IUserSelect = {
+  id: true,
+  email: true,
+  firstname: true,
+  lastname: true,
+  phone: true,
+}
 export async function getUsers() {
   try {
-    const users = await prisma.user.findMany()
+    const users: IUser[] = await prisma.user.findMany({
+      select: IUserSelect,
+    })
     console.log('users', users)
     return { users }
   } catch (error) {
@@ -21,8 +32,9 @@ export async function getUsers() {
 
 export async function getUserById(id: number) {
   try {
-    const user = await prisma.user.findUnique({
+    const user: IUser | null = await prisma.user.findUnique({
       where: { id: Number(id) },
+      select: IUserSelect,
     })
     return { user }
   } catch (error) {
@@ -32,8 +44,9 @@ export async function getUserById(id: number) {
 
 export async function getUserByEmail(email: string) {
   try {
-    const user = await prisma.user.findUnique({
+    const user: IUser | null = await prisma.user.findUnique({
       where: { email: email },
+      select: IUserSelect,
     })
     return { user }
   } catch (error) {

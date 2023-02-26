@@ -29,7 +29,7 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
 
     const setSorting = (newSort: SortType) => {
         console.log(newSort)
-        setAscending( newSort === sort ? !ascending : true);
+        setAscending(newSort === sort ? !ascending : true);
         setSort(newSort);
     }
 
@@ -71,7 +71,7 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
     }
 
     const styles = {
-        colonyColumns: "grid grid-cols-[1fr_1fr_0.5fr_1fr_1fr_1fr_1fr_0.2fr] gap-x-2 p-2",
+        colonyColumns: "grid grid-cols-[1fr_1fr_0.5fr_1fr_1fr_1fr_1fr_1fr_0.2fr] gap-x-2 p-2",
     }
 
     return (
@@ -92,21 +92,25 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
             </div>
             <div>
                 <TableHeaderRow className={styles.colonyColumns}>
-                    <TableHeaderCell title="Name" sortKey="name" sort={sort} ascending={ascending} onClick={() => setSorting("name")} />
-                    <TableHeaderCell title="Created" sortKey="created" sort={sort} ascending={ascending} onClick={() => setSorting("created")} />
-                    <TableHeaderCell title="Active" sortKey="active" sort={sort} ascending={ascending} onClick={() => setSorting("active")} />
+                    <TableHeaderCell title="Name" sortKey="name" sort={sort} ascending={ascending}
+                                     onClick={() => setSorting("name")}/>
+                    <TableHeaderCell title="Created" sortKey="created" sort={sort} ascending={ascending}
+                                     onClick={() => setSorting("created")}/>
+                    <TableHeaderCell title="Active" sortKey="active" sort={sort} ascending={ascending}
+                                     onClick={() => setSorting("active")}/>
                     <TableHeaderCell title="President"/>
                     <TableHeaderCell title="Treasurer"/>
                     <TableHeaderCell title="Secretary"/>
-                    <TableHeaderCell title="Type" sortKey="type" sort={sort} ascending={ascending} onClick={() => setSorting("type")} />
+                    <TableHeaderCell title="Type" sortKey="type" sort={sort} ascending={ascending}
+                                     onClick={() => setSorting("type")}/>
                     <TableHeaderCell className="text-right"/>
                 </TableHeaderRow>
                 {
                     filteredSortedColonies
                         .map((colony) => (
                             <TableDataRow href={"administration/colonies/detail/" + colony.id}
-                                  className={styles.colonyColumns}
-                                  key={colony.id.toString()}>
+                                          className={styles.colonyColumns}
+                                          key={colony.id.toString()}>
                                 <div>{colony.name}</div>
                                 <div>{moment(colony.createdAt).fromNow()}</div>
                                 <div>{colony.active ? "Yes" : "No"}</div>
@@ -114,6 +118,9 @@ const Colonies = ({colonies}: { colonies: ColonyPlus[] }) => {
                                 <div>{colony.treasurer ? colony.treasurer.firstname + " " + colony.treasurer.lastname : ""}</div>
                                 <div>{colony.secretary ? colony.secretary.firstname + " " + colony.secretary.lastname : ""}</div>
                                 <div>{ColonyWebTypes.valueOf(colony.type)?.label}</div>
+                                    <Link href={"/administration/residences/" + colony.id} passHref className="text-right">
+                                        Residences
+                                    </Link>
                                 <Link href={"/administration/colonies/edit/" + colony.id} passHref
                                       className="text-right">
                                     <IconButton size="small" title="Edit">

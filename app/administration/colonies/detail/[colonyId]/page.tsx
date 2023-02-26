@@ -12,6 +12,8 @@ const ColonyDetail = async ({params}: { params: { colonyId: number } }) => {
   const id = params.colonyId;
   const {colony, error} = await getColonyById(id)
 
+
+
   return (
 colony && (
     <div>
@@ -42,11 +44,11 @@ colony && (
               </div>
               <div className="detail-row-lbl-val">
                 <div className="label">Treasurer:</div>
-                <div className="value">{colony?.treasurer.firstname} {colony?.treasurer.lastname}</div>
+                <div className="value">{colony.treasurer?.firstname} {colony?.treasurer?.lastname}</div>
               </div>
               <div className="detail-row-lbl-val">
                 <div className="label">Secretary:</div>
-                <div className="value">{colony?.secretary.firstname} {colony?.secretary.lastname}</div>
+                <div className="value">{colony.secretary?.firstname} {colony?.secretary?.lastname}</div>
               </div>
             </div>
           </div>
@@ -79,7 +81,7 @@ colony && (
             <div className="detail-flex-row">
               <div className="spacer">
                 <span className="label">Role Notification: </span>
-                <span className={colony?.roleNotificationsSuspended ? "red" : "green"}>
+                <span className={colony.roleNotificationsSuspended ? "red" : "green"}>
                 {colony?.roleNotificationsSuspended ? "Suspended" : "Running"}
               </span>
               </div>
@@ -89,7 +91,7 @@ colony && (
 
           <h5>{ColonyWebTypes.valueOf(colony?.type)?.label}</h5>
           <div className="detail-flex-row">
-            <div className="label">{colony.residencies?.length}</div>
+            <div className="label">{colony.residences?.length}</div>
             <div className="value spacer">{ColonyWebTypes.valueOf(colony?.type)?.label}</div>
             <div>
               <button className="btn btn-outline-primary">Manage</button>

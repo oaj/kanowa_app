@@ -7,6 +7,7 @@ const nextConfig = {
   i18n,
   experimental: {
     appDir: true,
+    // typedRoutes: true,
     swcPlugins: [["next-superjson-plugin", {}]],
   },
 }

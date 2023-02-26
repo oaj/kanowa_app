@@ -56,7 +56,7 @@ model Colony {
   type                                  ColonyType?
   roleNotificationsSuspended            Boolean        @default(false)
   savedDuringRoleNotificationsSuspended Boolean        @default(false)
-  formerPresident                       User?           @relation("formerPresidents", fields: [formerPresidentId], references: [id])
+  formerPresident                       User?          @relation("formerPresidents", fields: [formerPresidentId], references: [id])
   formerPresidentId                     Int?
   formerTreasurer                       User?          @relation("formerTreasurers", fields: [formerTreasurerId], references: [id])
   formerTreasurerId                     Int?
@@ -68,7 +68,7 @@ model Colony {
   treasurerId                           Int?
   secretary                             User?          @relation("secretaries", fields: [secretaryId], references: [id])
   secretaryId                           Int?
-  residencies                           Residence[]
+  residences                            Residence[]
   residenceTags                         ResidenceTag[]
 }
 
@@ -91,7 +91,7 @@ model ResidenceTag {
   colony     Colony      @relation(fields: [colonyId], references: [id])
   colonyId   Int
   residences Residence[]
-  name       String
+  name       String      @unique
   deleted    Boolean     @default(false)
 }
 
@@ -110,19 +110,4 @@ enum Role {
 enum LangKey {
   EN
   ES
-}
-
-// ----------------------------------------------------------
-model Userr {
-  id      Int      @id @default(autoincrement())
-  email   String   @unique
-  name    String
-  profile Profile?
-}
-
-model Profile {
-  id     Int    @id @default(autoincrement())
-  bio    String
-  user   Userr  @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId Int    @unique
 }

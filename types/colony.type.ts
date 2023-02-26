@@ -3,23 +3,21 @@ import {IResidence} from "./residence.type";
 import {Colony, User, Residence} from "@prisma/client";
 import {ColonyType} from "@prisma/client";
 
-export type ColonyPlus = (Colony & { president: User, treasurer: User | null, secretary: User | null , residencies?: Residence[]})
+export type ColonyPlus = (Colony & { president: User, treasurer: User | null, secretary: User | null , residences?: Residence[]})
 
 
 export interface IColony {
-  id?: string,
+  id?: number,
   name: string,
-  created: Date,
+  createdAt: Date,
   active: boolean,
   president: IUser,
   treasurer?: IUser | null,
   secretary?: IUser | null,
-  type?: string,
-  lastModifiedBy: string,
-  lastModifiedDate: Date,
+  type: ColonyType | null,
+  updatedAt: Date,
   residences: IResidence[],
 }
-
 export interface IColonyManagement {
   id?: string,
   name: string,
