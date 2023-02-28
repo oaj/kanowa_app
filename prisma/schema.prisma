@@ -35,6 +35,9 @@ model User {
   owners            Residence[] @relation("owners")
   tenants           Residence[] @relation("tenants")
   responsible       Residence[] @relation("responsibles")
+  formerOwners      Residence[] @relation("formerOwners")
+  formerTenants     Residence[] @relation("formerTenants")
+  formerResponsible Residence[] @relation("formerResponsibles")
   active            Boolean     @default(false)
   blocked           Boolean     @default(false)
   imageUrl          String?
@@ -68,22 +71,32 @@ model Colony {
   treasurerId                           Int?
   secretary                             User?          @relation("secretaries", fields: [secretaryId], references: [id])
   secretaryId                           Int?
+  // todo: buildings                             Building[]
   residences                            Residence[]
   residenceTags                         ResidenceTag[]
 }
 
 model Residence {
-  id            Int            @id @default(autoincrement())
-  doorNumber    String
-  colony        Colony         @relation(fields: [colonyId], references: [id])
-  colonyId      Int
-  owner         User           @relation("owners", fields: [ownerId], references: [id])
-  ownerId       Int
-  tenant        User           @relation("tenants", fields: [tenantId], references: [id])
-  tenantId      Int
-  responsible   User           @relation("responsibles", fields: [responsibleId], references: [id])
-  responsibleId Int
-  residenceTags ResidenceTag[]
+  id                                    Int            @id @default(autoincrement())
+  doorNumber                            String
+  colony                                Colony         @relation(fields: [colonyId], references: [id])
+  colonyId                              Int
+  owner                                 User           @relation("owners", fields: [ownerId], references: [id])
+  ownerId                               Int
+  tenant                                User           @relation("tenants", fields: [tenantId], references: [id])
+  tenantId                              Int
+  responsible                           User           @relation("responsibles", fields: [responsibleId], references: [id])
+  responsibleId                         Int
+  formerOwner                           User?           @relation("formerOwners", fields: [formerOwnerId], references: [id])
+  formerOwnerId                         Int?
+  formerTenant                          User?           @relation("formerTenants", fields: [formerTenantId], references: [id])
+  formerTenantId                        Int?
+  formerResponsible                     User?           @relation("formerResponsibles", fields: [formerResponsibleId], references: [id])
+  formerResponsibleId                   Int?
+  residenceTags                         ResidenceTag[]
+  balance                               Decimal        @default(0.0)
+  deleted                               Boolean        @default(false)
+  savedDuringRoleNotificationsSuspended Boolean        @default(false)
 }
 
 model ResidenceTag {

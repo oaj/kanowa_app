@@ -1,9 +1,7 @@
 import * as React from 'react';
-import {getColonies, getColonyById} from "@/lib/prisma/colonies";
-import Residences from "./Residences";
-import {ColonyPlus} from "@/types/colony.type";
+import {getColonyById} from "@/lib/prisma/colonies";
 import {getResidencesByColonyId} from "@/lib/prisma/residences";
-import {ResidencePlus} from "@/types/residence.type";
+import Residences from "./Residencies";
 
 // Wait for better version !
 // Use: revalidateUrl('/administration/colonies/'): doesnt work.

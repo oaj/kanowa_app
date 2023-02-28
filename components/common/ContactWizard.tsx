@@ -65,6 +65,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
         firstname: "",
         lastname: "",
         phone: "",
+        role: null,
         pageName: pages.emailFormPage,
         emailRequired: emailRequired
     };
@@ -99,6 +100,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
             lastname: user.lastname,
             phone: user.phone,
             pageName: '',
+            role: null,
             emailRequired: emailRequired
         }
         console.log('clonedUser', clonedUser)
@@ -167,6 +169,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                 firstname: res.user.firstname,
                 lastname: res.user.lastname,
                 phone: res.user.phone,
+                role: res.user.role,
             }
             return iUser;
         })

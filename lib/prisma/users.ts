@@ -1,24 +1,27 @@
 import prisma from '.'
 import {IUser} from "@/types/user.type";
+import {User} from "@prisma/client";
 
 // Used to select individual data in a select
 export const IUserSelect = {
-  id: true,
-  email: true,
-  firstname: true,
-  lastname: true,
-  phone: true,
+    id: true,
+    email: true,
+    firstname: true,
+    lastname: true,
+    phone: true,
+    role: true,
 }
+
 export async function getUsers() {
-  try {
-    const users: IUser[] = await prisma.user.findMany({
-      select: IUserSelect,
-    })
-    console.log('users', users)
-    return { users }
-  } catch (error) {
-    throw error
-  }
+    try {
+        const users: IUser[] = await prisma.user.findMany({
+            select: IUserSelect,
+        })
+        console.log('users', users)
+        return {users}
+    } catch (error) {
+        throw error
+    }
 }
 
 // export async function createUser(user: User) {
@@ -31,25 +34,25 @@ export async function getUsers() {
 // }
 
 export async function getUserById(id: number) {
-  try {
-    const user: IUser | null = await prisma.user.findUnique({
-      where: { id: Number(id) },
-      select: IUserSelect,
-    })
-    return { user }
-  } catch (error) {
-    return { error }
-  }
+    try {
+        const user: IUser | null = await prisma.user.findUnique({
+            where: {id: Number(id)},
+            select: IUserSelect,
+        })
+        return {user}
+    } catch (error) {
+        return {error}
+    }
 }
 
 export async function getUserByEmail(email: string) {
-  try {
-    const user: IUser | null = await prisma.user.findUnique({
-      where: { email: email },
-      select: IUserSelect,
-    })
-    return { user }
-  } catch (error) {
-    return { error }
-  }
+    try {
+        const user: IUser | null = await prisma.user.findUnique({
+            where: {email: email},
+            select: IUserSelect,
+        })
+        return {user}
+    } catch (error) {
+        return {error}
+    }
 }

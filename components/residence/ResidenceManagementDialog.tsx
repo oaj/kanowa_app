@@ -10,10 +10,17 @@ import {Button} from "@mui/material";
 import revalidateUrl from "@/services/revalidate.service";
 import {saveResidence} from "@/services/residence.service";
 import {IColony} from "@/types/colony.type";
+import {ResidenceTag} from "@prisma/client";
+import {IResidenceTag} from "@/types/residence.tag.type";
 
 export const revalidate = 1
 
-const ResidenceManagementDialog = ({colony, residence}: {colony: IColony, residence: IResidence | null}) => {
+const ResidenceManagementDialog = ({colony, residence, residenceTags}:
+                                       {
+                                           colony: IColony,
+                                           residence: IResidence | null,
+                                           residenceTags: IResidenceTag[] | undefined
+                                       }) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
@@ -26,6 +33,7 @@ const ResidenceManagementDialog = ({colony, residence}: {colony: IColony, reside
         firstname: "",
         lastname: "",
         phone: "",
+        role: null,
     };
     const [owner, setOwner] = useState(residence?.owner ? residence.owner : emptyUser);
     const [tenant, setTenant] = useState(residence?.tenant ? residence.tenant : emptyUser);
@@ -33,7 +41,7 @@ const ResidenceManagementDialog = ({colony, residence}: {colony: IColony, reside
 
     const initialValues = useRef({
         doorNumber: residence?.doorNumber || '',
-        residenceTags: residence?.residenceTags.map(tag => tag.name) || []
+        residenceTags: residence?.residenceTags || []
     });
 
     const validationSchema = Yup.object().shape({
@@ -43,18 +51,19 @@ const ResidenceManagementDialog = ({colony, residence}: {colony: IColony, reside
             .required("This field is required!"),
     });
 
-    const handleSaveColony = (formValue: {
+    const handleSaveResidence = (formValue: {
         doorNumber: string,
-        residenceTags: string[],
+        residenceTags: IResidenceTag[],
     }) => {
         const {doorNumber, residenceTags} = formValue;
 
         setMessage("");
-
+        console.log('Handle Save Residence')
         console.log("doorNumber", doorNumber);
         console.log("owner", owner);
         console.log("tenant", tenant);
         console.log("responsible", responsible);
+        console.log("residenceTags", residenceTags);
 
         setLoading(true);
 
@@ -98,7 +107,7 @@ const ResidenceManagementDialog = ({colony, residence}: {colony: IColony, reside
                 // enableReinitialize
                 initialValues={initialValues.current}
                 validationSchema={validationSchema}
-                onSubmit={handleSaveColony}
+                onSubmit={handleSaveResidence}
             >
                 <Form>
                     <div className="flex flex-col gap-2 pt-4">
@@ -130,10 +139,11 @@ const ResidenceManagementDialog = ({colony, residence}: {colony: IColony, reside
                                 name="residenceTags"
                                 multiple={true}
                             >
-                                <option value="NY">New York</option>
-                                <option value="SF">San Francisco</option>
-                                <option value="CH">Chicago</option>
-                                <option value="OTHER">Other</option>
+                                {
+                                    residenceTags?.map((tag) => {
+                                        return <option key={tag.id} value={tag.id}>tag.New York</option>
+                                    })
+                                }
                             </Field>
                             <ErrorMessage
                                 name="residenceTags"

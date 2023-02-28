@@ -1,6 +1,7 @@
 import prisma from '.'
 import {IResidence} from "@/types/residence.type";
 import {IUserSelect} from "@/lib/prisma/users";
+import {IResidenceTagSelect} from "@/lib/prisma/residenceTags";
 
 export const IResidenceSelect = {
     id: true,
@@ -21,9 +22,7 @@ export const IResidenceSelect = {
         }
     },
     residenceTags: {
-        select: {
-            name: true,
-        },
+        select: IResidenceTagSelect,
     },
 }
 
@@ -60,3 +59,4 @@ export async function getResidenceById(id: number) {
         return {error}
     }
 }
+

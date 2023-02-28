@@ -1,16 +1,13 @@
 "use client"
-import {Colony, User} from "@prisma/client";
 import {ChangeEvent, useEffect, useState} from "react";
-import {ColonyPlus, ColonyWebTypes, IColony} from "@/types/colony.type";
 import * as React from "react";
-import {MdAddBusiness, MdCancel, MdEdit, MdKeyboardArrowDown, MdKeyboardArrowUp} from "react-icons/md";
-import moment from "moment/moment";
+import {MdAddBusiness, MdCancel, MdEdit} from "react-icons/md";
 import Link from "next/link";
 import {IconButton} from "@mui/material";
 import TableHeaderRow from "@/components/table/TableHeaderRow";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import TableDataRow from "@/components/table/TableDataRow";
-import {IResidence, ResidencePlus} from "@/types/residence.type";
+import {IResidence} from "@/types/residence.type";
 
 type SortType = "doorNumber";
 const sortFields = {
@@ -35,11 +32,6 @@ const Residences = ({colonyId, colonyName, residences}: { colonyId: number, colo
         return a ? 1 : -1;
     }
 
-    const sorter = (a: IResidence, b: IResidence) => {
-        const valA = sortFields[sort](a)
-        const valB = sortFields[sort](b)
-        return number(ascending) * valA.localeCompare(valB)
-    }
 
     const changeFilterText = (event: ChangeEvent) => {
         setFilterText((event.target as HTMLInputElement).value);
@@ -47,6 +39,11 @@ const Residences = ({colonyId, colonyName, residences}: { colonyId: number, colo
     }
 
     useEffect(() => {
+        const sorter = (a: IResidence, b: IResidence) => {
+            const valA = sortFields[sort](a)
+            const valB = sortFields[sort](b)
+            return number(ascending) * valA.localeCompare(valB)
+        }
 
         let fsResidences: IResidence[] | null;
         fsResidences = residences?.sort((a, b) => sorter(a, b))

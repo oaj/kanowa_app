@@ -2,12 +2,13 @@ import {getUserById} from "@/lib/prisma/users";
 import {NextApiRequest, NextApiResponse} from "next";
 import {Role, User} from "@prisma/client";
 import prisma from "@/lib/prisma";
+import {IUser} from "@/types/user.type";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "GET") {
         try {
             const {userId} = req.query
-            const {user, error}: { user?: User | null, error?: any } = await getUserById(Number(userId))
+            const {user, error}: { user?: IUser | null, error?: any } = await getUserById(Number(userId))
             console.log('handler.get - user', user)
             console.log('handler.get - error', error)
             if (error) {

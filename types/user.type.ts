@@ -6,6 +6,7 @@ export interface IUser {
   firstname: string,
   lastname: string,
   phone: string | null,
+  role: Role | null
 }
 
 // Used for user profile
