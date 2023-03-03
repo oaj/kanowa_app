@@ -19,7 +19,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
                                        {
                                            colony: IColony,
                                            residence: IResidence | null,
-                                           residenceTags: IResidenceTag[] | undefined
+                                           residenceTags: IResidenceTag[] | undefined | null
                                        }) => {
 
     const [loading, setLoading] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
                 }
                 if (error) {
                     console.log('dialog - error',error)
-                    setMessage(capitalizeFirstLetter((error.fieldName + ': ' +  error.message)).toLowerCase())
+                    setMessage(error.fieldName + ': ' +  error.message)
                     setLoading(false)
                 }
             },

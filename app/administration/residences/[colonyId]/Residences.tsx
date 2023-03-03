@@ -97,7 +97,7 @@ const Residences = ({
                                     <div>{residence.owner ? residence.owner.firstname + " " + residence.owner.lastname : ""}</div>
                                     <div>{residence.tenant ? residence.tenant.firstname + " " + residence.tenant.lastname : ""}</div>
                                     <div>{residence.responsible ? residence.responsible.firstname + " " + residence.responsible.lastname : ""}</div>
-                                    <Link href={"/administration/residences/detail/" + residence.id} passHref
+                                    <Link href={"/administration/residences/detail/" + colonyId + "/" + residence.id} passHref
                                           className="text-right">
                                         <IconButton size="small" title="Detail">
                                             <MdListAlt fontSize="inherit"

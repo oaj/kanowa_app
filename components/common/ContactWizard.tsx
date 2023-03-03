@@ -296,7 +296,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
     };
 
     const handleBlur = (event: FocusEvent<HTMLInputElement>) => {
-        console.log('Blur - ' + event.target.name, ' = ', event.target.value);
+        // console.log('Blur - ' + event.target.name, ' = ', event.target.value);
         if ('email' === event.target.name) {
             setDialogUser(previousState => {
                 return {...previousState, email: event.target.value}
