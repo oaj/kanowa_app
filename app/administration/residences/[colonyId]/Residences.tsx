@@ -1,7 +1,7 @@
 "use client"
 import {ChangeEvent, useEffect, useState} from "react";
 import * as React from "react";
-import {MdAddBusiness, MdCancel, MdEdit} from "react-icons/md";
+import {MdAddBusiness, MdCancel, MdEdit, MdListAlt} from "react-icons/md";
 import Link from "next/link";
 import {IconButton} from "@mui/material";
 import TableHeaderRow from "@/components/table/TableHeaderRow";
@@ -14,7 +14,11 @@ const sortFields = {
     "doorNumber": (residence: IResidence) => residence.doorNumber,
 }
 
-const Residences = ({colonyId, colonyName, residences}: { colonyId: number, colonyName: string, residences: IResidence[] }) => {
+const Residences = ({
+                        colonyId,
+                        colonyName,
+                        residences
+                    }: { colonyId: number, colonyName: string, residences: IResidence[] }) => {
     const [filteredSortedResidences, setFilteredSortedResidences] = useState<IResidence[]>([]);
 
     const [sort, setSort] = useState<SortType>("doorNumber");
@@ -57,15 +61,15 @@ const Residences = ({colonyId, colonyName, residences}: { colonyId: number, colo
     }
 
     const styles = {
-        colonyColumns: "grid grid-cols-[1fr_1fr_1fr_1fr_0.2fr] gap-x-2 p-2",
+        colonyColumns: "grid grid-cols-[1fr_1fr_1fr_1fr_0.3fr_0.3fr] gap-x-2 p-2",
     }
 
     return (
         <div>
             <div className="">
-                <h2 className="text-center">Recidencies in {colonyName}</h2>
+                <h2 className="text-center">{residences.length} Recidencies in {colonyName}</h2>
                 <Link href={"/administration/residences/create/" + colonyId} className="">
-                    <IconButton aria-label="delete" size="medium">
+                    <IconButton aria-label="delete" size="small">
                         <MdAddBusiness className="addIcon xx-large no-events"/>
                         New Residence
                     </IconButton>
@@ -88,19 +92,26 @@ const Residences = ({colonyId, colonyName, residences}: { colonyId: number, colo
                 {
                     filteredSortedResidences
                         .map((residence) => (
-                            <TableDataRow href={"administration/residences/detail/" + residence.id}
-                                          className={styles.colonyColumns}
-                                          key={residence.id.toString()}>
-                                <div>{residence.doorNumber}</div>
-                                <div>{residence.owner ? residence.owner.firstname + " " + residence.owner.lastname : ""}</div>
-                                <div>{residence.tenant ? residence.tenant.firstname + " " + residence.tenant.lastname : ""}</div>
-                                <div>{residence.responsible ? residence.responsible.firstname + " " + residence.responsible.lastname : ""}</div>
-                                <Link href={"/administration/residences/edit/" + residence.id} passHref className="text-right">
-                                    <IconButton size="small" title="Edit">
-                                        <MdEdit fontSize="inherit" className="fill-current group-hover:fill-gray-800"/>
-                                    </IconButton>
-                                </Link>
-                            </TableDataRow>
+                                <TableDataRow key={residence.id.toString()} className={styles.colonyColumns}>
+                                    <div>{residence.doorNumber}</div>
+                                    <div>{residence.owner ? residence.owner.firstname + " " + residence.owner.lastname : ""}</div>
+                                    <div>{residence.tenant ? residence.tenant.firstname + " " + residence.tenant.lastname : ""}</div>
+                                    <div>{residence.responsible ? residence.responsible.firstname + " " + residence.responsible.lastname : ""}</div>
+                                    <Link href={"/administration/residences/detail/" + residence.id} passHref
+                                          className="text-right">
+                                        <IconButton size="small" title="Detail">
+                                            <MdListAlt fontSize="inherit"
+                                                    className="fill-current group-hover:fill-gray-800"/>
+                                        </IconButton>
+                                    </Link>
+                                    <Link href={"/administration/residences/edit/" + colonyId + "/" + residence.id} passHref
+                                          className="text-right">
+                                        <IconButton size="small" title="Edit">
+                                            <MdEdit fontSize="inherit"
+                                                    className="fill-current group-hover:fill-gray-800"/>
+                                        </IconButton>
+                                    </Link>
+                                </TableDataRow>
                         ))
                 }
             </div>

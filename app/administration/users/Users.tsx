@@ -2,27 +2,27 @@
 import * as React from 'react';
 import {ChangeEvent, useEffect, useState} from "react";
 import moment from 'moment';
-import {MdKeyboardArrowDown, MdKeyboardArrowUp, MdCancel, MdAddBusiness, MdEdit} from "react-icons/md";
+import {MdCancel, MdEdit} from "react-icons/md";
 import Link from "next/link";
-import {User} from "@prisma/client";
 import {IconButton} from "@mui/material";
 import TableDataRow from "@/components/table/TableDataRow";
 import TableHeaderRow from "@/components/table/TableHeaderRow";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
+import {IUser} from "@/types/user.type";
 
 export type SortType = "name" | "username" | "created" | "active" | "email";
 
 const sortFields = {
-    "name": (user: User) => user.firstname+user.lastname,
-    "username": (user: User) => user.username,
-    "created": (user: User) => user.createdAt,
-    "active": (user: User) => user.active,
-    "email": (user: User) => user.email,
+    "name": (user: IUser) => user.firstname+user.lastname,
+    "username": (user: IUser) => user.username,
+    "created": (user: IUser) => user.createdAt,
+    "active": (user: IUser) => user.active,
+    "email": (user: IUser) => user.email,
 }
 
-const Users = ({users}: { users: User[] }) => {
+const Users = ({users}: { users: IUser[] }) => {
 
-    const [filteredSortedUsers, setFilteredSortedUsers] = useState<User[]>([]);
+    const [filteredSortedUsers, setFilteredSortedUsers] = useState<IUser[]>([]);
 
     const [sort, setSort] = useState<SortType>("created");
     const [ascending, setAscending] = useState<boolean>(true);
@@ -39,7 +39,7 @@ const Users = ({users}: { users: User[] }) => {
         return a ? 1 : -1;
     }
 
-    const sorter = (a: User, b: User) => {
+    const sorter = (a: IUser, b: IUser) => {
         const valA = sortFields[sort](a)
         const valB = sortFields[sort](b)
         if (typeof valA === 'string' && typeof valB === 'string') {
@@ -61,7 +61,7 @@ const Users = ({users}: { users: User[] }) => {
 
     useEffect(() => {
 
-        let fsUsers: User[] | [];
+        let fsUsers: IUser[] | [];
         fsUsers = users?.sort((a, b) => sorter(a, b))
             .filter(user => {
                 const textToBeFiltered = user.firstname + " " + user.lastname + " " + user.email + +" " + user.username;
@@ -83,12 +83,6 @@ const Users = ({users}: { users: User[] }) => {
         <div>
             <div className="">
                 <h2 className="text-center">Users</h2>
-                <Link href="/administration/users/create" className="">
-                    <IconButton aria-label="delete" size="medium">
-                        <MdAddBusiness className="mr-2 text-2xl pointer-events-none"/>
-                        New User
-                    </IconButton>
-                </Link>
             </div>
             <div className="bg-gray-800 flex gap-2 items-center px-4 py-2">
                 <div className="flex-1">Set filter:</div>
@@ -109,7 +103,7 @@ const Users = ({users}: { users: User[] }) => {
                         .map((user) => (
                             <TableDataRow href={"administration/users/detail/" + user.id}
                             className={styles.userColumns}
-                            key={user.id.toString()}>
+                            key={user.id?.toString()}>
                                 <div>{user.firstname + " " + user.lastname}</div>
                                 <div>{user.username}</div>
                                 <div>{moment(user.createdAt).fromNow()}</div>

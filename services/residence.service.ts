@@ -18,7 +18,8 @@ export const saveResidence = async (
     responsible = isUserEmpty(responsible) ? null : responsible;
 
     console.log('saveResidence before fetch')
-    return fetch(API_URL + (id ? id : ''), {
+
+    const result = await fetch(API_URL, {
         method: id ? 'PUT' : 'POST',
         headers: {
             'Content-type': 'Application/json',
@@ -33,15 +34,11 @@ export const saveResidence = async (
             responsible: responsible,
         })
     }).then(response => {
-        if (response.ok) {
-            return response.json();
-        } else {
-            throw new Error(response.statusText);
-        }
+        return response.json();
     }).catch(reason => {
-        console.log('reason', reason)
-        return Promise.reject(reason.message)
+        return reason.message
     });
+    return result
 };
 
 const isUserEmpty = (user: IUser | null) => {

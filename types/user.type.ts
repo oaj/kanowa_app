@@ -2,11 +2,14 @@ import {Role} from "@prisma/client";
 
 export interface IUser {
   id: number | null,
+  username?: string
   email: string,
   firstname: string,
   lastname: string,
   phone: string | null,
   role: Role | null
+  active: boolean
+  createdAt: Date | null
 }
 
 // Used for user profile

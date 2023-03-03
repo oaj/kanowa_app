@@ -1,6 +1,8 @@
 import prisma from '.'
 import {IResidenceTag} from "@/types/residence.tag.type";
 
+export const revalidate = 5;
+
 export const IResidenceTagSelect = {
     id: true,
     name: true,

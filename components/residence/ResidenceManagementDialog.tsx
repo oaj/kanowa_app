@@ -4,14 +4,14 @@ import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
 
 import {IUser} from "@/types/user.type";
-import {IResidence, ResidencePlus} from "@/types/residence.type";
+import {IResidence} from "@/types/residence.type";
 import {ContactWizard} from "../common/ContactWizard";
 import {Button} from "@mui/material";
 import revalidateUrl from "@/services/revalidate.service";
 import {saveResidence} from "@/services/residence.service";
 import {IColony} from "@/types/colony.type";
-import {ResidenceTag} from "@prisma/client";
 import {IResidenceTag} from "@/types/residence.tag.type";
+import {capitalizeFirstLetter} from "@/lib/Kanowa.Utils";
 
 export const revalidate = 1
 
@@ -34,6 +34,8 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
         lastname: "",
         phone: "",
         role: null,
+        active: true,
+        createdAt: null,
     };
     const [owner, setOwner] = useState(residence?.owner ? residence.owner : emptyUser);
     const [tenant, setTenant] = useState(residence?.tenant ? residence.tenant : emptyUser);
@@ -68,16 +70,28 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
         setLoading(true);
 
         saveResidence(id, colony.id as number, doorNumber, residenceTags, owner, tenant, responsible).then(
-            () => {
-                // revalidateUrl('/administration/residences/').then(value => {
-                //         console.log(value)
-                //         window.history.back()
-                //     }
-                // )
-                window.history.back()
+            (response) => {
+                const {residence, error} = response
+                if (residence) {
+                    // revalidateUrl('/administration/residences/').then(value => {
+                    //         console.log(value)
+                    //         window.history.back()
+                    //     }
+                    // )
+                    window.history.back()
+                }
+                if (error) {
+                    console.log('dialog - error',error)
+                    setMessage(capitalizeFirstLetter((error.fieldName + ': ' +  error.message)).toLowerCase())
+                    setLoading(false)
+                }
             },
             (error) => {
                 console.log('error', error);
+                console.log('error.message', error.message);
+                console.log('error.response', error.response);
+                console.log('error.response.data', error.response?.data);
+                console.log('error.response.data.message', error.response?.data?.message);
                 const resMessage =
                     (error.response &&
                         error.response.data &&
@@ -100,7 +114,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
         // <div className="dialog-layout">
         <div className="p-2">
             <div className="flex-row">
-                <div className="text-2xl">Edit</div>
+                <div className="text-2xl">{id ? 'Edit' : 'Create'}</div>
                 <div className="text-xl">{initialValues.current.doorNumber} in {colony.name}</div>
             </div>
             <Formik

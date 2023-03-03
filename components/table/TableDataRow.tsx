@@ -2,19 +2,16 @@ import Link from "next/link";
 import {ReactNode} from "react";
 
 type Props = {
-    href: string,
-    key: string,
-    className: string,
+    href?: string,
+    className?: string,
     children: ReactNode,
 }
-function TableDataRow({href, key, className, children} : Props ) {
+function TableDataRow({className, children} : Props ) {
     return (
-        <Link href={href}
-              className={className + " group items-center text-current hover:text-gray-800 hover:bg-gray-100 no-underline" +
-                  " border-0 border-b border-gray-500 border-solid"}
-              key={key}>
+        <div className={className + " group items-center text-current hover:text-gray-800 hover:bg-gray-100 no-underline" +
+                  " border-0 border-b border-gray-500 border-solid"}>
             <>{children}</>
-        </Link>
+        </div>
         )
 }
 export default TableDataRow

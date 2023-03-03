@@ -1,9 +1,9 @@
 import prisma from '.'
-import {ColonyPlus, IColony} from "@/types/colony.type";
-import {IUser} from "@/types/user.type";
-import {IResidence} from "@/types/residence.type";
+import {IColony} from "@/types/colony.type";
 import {IUserSelect} from "@/lib/prisma/users";
 import {IResidenceSelect} from "@/lib/prisma/residences";
+
+export const revalidate = 5;
 
 export const IColonySelect = {
     id: true,
@@ -39,13 +39,13 @@ export async function getColonies() {
         console.log('getColonies - colonies', colonies)
         return {colonies}
     } catch (error) {
-        throw error
+        return {error}
     }
 }
 
 export async function getColonyById(id: number) {
     try {
-        const colony = await prisma.colony.findUnique({
+        const colony: IColony | null = await prisma.colony.findUnique({
             where: {id: Number(id)},
             select: IColonySelect
         })

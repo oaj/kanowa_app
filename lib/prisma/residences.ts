@@ -3,6 +3,8 @@ import {IResidence} from "@/types/residence.type";
 import {IUserSelect} from "@/lib/prisma/users";
 import {IResidenceTagSelect} from "@/lib/prisma/residenceTags";
 
+export const revalidate = 5;
+
 export const IResidenceSelect = {
     id: true,
     doorNumber: true,
@@ -45,14 +47,9 @@ export async function getResidencesByColonyId(colonyId: number) {
 
 export async function getResidenceById(id: number) {
     try {
-        const residence = await prisma.residence.findUnique({
+        const residence: IResidence | null = await prisma.residence.findUnique({
             where: {id: Number(id)},
-            include: {
-                owner: true,
-                tenant: true,
-                responsible: true,
-                residenceTags: true,
-            }
+            select: IResidenceSelect,
         })
         return {residence}
     } catch (error) {

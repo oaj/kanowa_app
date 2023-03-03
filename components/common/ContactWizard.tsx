@@ -50,7 +50,7 @@ type WizardProps = {
 
 export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUser}: WizardProps) => {
     // console.log('----------------------------------------------- render ----------------------------------------------')
-    console.log('user', user)
+    // console.log('user', user)
     // console.log('scopeUsers', scopeUsers);
     const initialContactState: ContactState = useMemo(() => {
         return {
@@ -66,6 +66,8 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
         lastname: "",
         phone: "",
         role: null,
+        active: true,
+        createdAt: null,
         pageName: pages.emailFormPage,
         emailRequired: emailRequired
     };
@@ -92,22 +94,24 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
     }
 
     useEffect(() => {
-        console.log('user', user)
+        // console.log('user', user)
         const clonedUser = {
             id: user.id,
             email: user.email,
             firstname: user.firstname,
             lastname: user.lastname,
             phone: user.phone,
-            pageName: '',
             role: null,
+            active: user.active,
+            createdAt: user.createdAt,
+            pageName: '',
             emailRequired: emailRequired
         }
-        console.log('clonedUser', clonedUser)
+        // console.log('clonedUser', clonedUser)
         setDialogUser(clonedUser);
         setContactState(initialContactState);
         setNextPage(pages.emailFormPage);
-        console.log('useEffect-dialogUser', dialogUser)
+        // console.log('useEffect-dialogUser', dialogUser)
         // eslint-disable-next-line
     }, [user, fieldName, initialContactState, pages.emailFormPage])
 
@@ -154,15 +158,15 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
 
     // MultiPage
     const lookupInScope = (email: string) => {
-        console.log("Look Up In Scope: " + email)
+        // console.log("Look Up In Scope: " + email)
         return scopeUsers.find(value => value.email === email);
     }
 
     const lookupContactRemote: (email: string) => Promise<IUser> = async (email: string) => {
-        console.log("Look Up Remote: " + email)
+        // console.log("Look Up Remote: " + email)
 
         return await getUserByEmail(email).then(res => {
-            console.log('getUserByEmail - res', res)
+            // console.log('getUserByEmail - res', res)
             const iUser: IUser = {
                 id: res.user.id,
                 email: res.user.email,
@@ -170,6 +174,8 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                 lastname: res.user.lastname,
                 phone: res.user.phone,
                 role: res.user.role,
+                active: res.user.active,
+                createdAt: res.user.createdAt,
             }
             return iUser;
         })
@@ -224,11 +230,11 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
     const handleSubmit = (formValue: { email: string, firstname: string, lastname: string }) => {
         if (!open) return;
 
-        console.log('handleSubmit')
+        // console.log('handleSubmit')
 
         const {email, firstname, lastname} = formValue;
-        console.log("handleSubmit - form: ", email, firstname, lastname);
-        console.log('1: handleSubmit - ' + fieldName + ': dialog user', dialogUser);
+        // console.log("handleSubmit - form: ", email, firstname, lastname);
+        // console.log('1: handleSubmit - ' + fieldName + ': dialog user', dialogUser);
 
         const currentPageName = pageName;
         if (currentPageName === pages.emailFormPage) {
@@ -236,7 +242,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
 
             if (email) {
                 let scopeUser: IUser | undefined = lookupInScope(email);
-                console.log('scopeUser', scopeUser);
+                // console.log('scopeUser', scopeUser);
                 if (scopeUser) {
                     setContactState(prevState => ({...prevState, nameRequired: false, contactDone: true}));
                     setDialogUser({...scopeUser, emailRequired: emailRequired, pageName: pages.detailPage});
@@ -246,7 +252,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
 
                     // no scope user
                     lookupContactRemote(email).then(remoteUser => {
-                        console.log('remoteUser', remoteUser)
+                        // console.log('remoteUser', remoteUser)
                         setContactState(prevState => ({
                             ...prevState,
                             nameRequired: false,
@@ -271,7 +277,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
             }
 
         } else if (currentPageName === pages.nameFormPage) {
-            console.log("submit - name page")
+            // console.log("submit - name page")
             setContactState(prevState => ({...prevState, contactDone: true}));
             setNextPage(pages.detailPage);
             setDialogUser(previousState => {
@@ -284,7 +290,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                 }
             });
         } else if (currentPageName === pages.detailPage) {
-            console.log("submit - detail page");
+            // console.log("submit - detail page");
             handleDone();
         }
     };
@@ -314,7 +320,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                 <div className="label spacer">{fieldName}</div>
                 <div>{user.firstname + " " + user.lastname}</div>
             </div>
-            <div className="flex flex-row gab-2">
+            <div className="flex flex-row">
                 {user.phone && (
                     <Tooltip title={user.phone} placement="top-end" className="shrink">
                         <IconButton>
@@ -330,14 +336,15 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                     </Tooltip>
                 )}
                 <div className="grow"/>
-                <Tooltip title="Remove" placement="top-start" className={`flex-none larger ${user.firstname === "" ? "collapse" : "visible"}`}>
-                    <IconButton>
-                        <MdHighlightOff className="larger" onClick={handleRemove}/>
+                <Tooltip title="Remove" placement="top-start"
+                         className={`flex-none larger ${user.firstname === "" ? "collapse" : "visible"}`}>
+                    <IconButton onClick={handleRemove}>
+                        <MdHighlightOff className="larger"/>
                     </IconButton>
                 </Tooltip>
                 <Tooltip title="Edit" placement="top-end" className="shrink">
-                    <IconButton>
-                        <MdEdit className="larger" onClick={handleClickOpen}/>
+                    <IconButton onClick={handleClickOpen}>
+                        <MdEdit className="larger"/>
                     </IconButton>
                 </Tooltip>
             </div>
@@ -346,8 +353,7 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                 <Dialog open={open} fullWidth maxWidth="sm" onClose={handleClose}>
                     <DialogTitle>
                         <div><span>Edit {fieldName} {user.firstname} {user.lastname}</span></div>
-                        <div><span>Edit {fieldName} {dialogUser.firstname} {dialogUser.lastname}</span></div>
-                        <div><span>Page: {dialogUser.pageName}</span></div>
+                        {/*<div><span>Page: {dialogUser.pageName}</span></div>*/}
                     </DialogTitle>
                     <DialogContent>
                         <Formik
@@ -359,60 +365,72 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
 
                             <Form id="form">
                                 {/*<FormObserver/>*/}
-                                <div hidden={pageName !== pages.removeWarning}>
+                                <div className={pageName !== pages.removeWarning ? "hidden" : ""}>
                                     <div>
                                         <p>Please, to remove the contact, click the button below.</p>
-                                        <div className="flex-row">
+                                        <div className="flex flex-row">
                                             <div className="spacer">
-                                                <Button onClick={handleCancel}>
+                                                <Button color="warning" onClick={handleCancel}>
                                                     Cancel
                                                 </Button>
                                             </div>
                                             <div>
-                                                <Button onClick={clearContact}>
+                                                <Button color="primary" onClick={clearContact}>
                                                     Remove
                                                 </Button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div hidden={pageName !== pages.detailPage}>
-                                    <div>{dialogUser.firstname} {dialogUser.lastname}</div>
-                                    <div>{dialogUser.email}</div>
+                                <div className="flex flex-col gap-2">
+                                    <div className={pageName !== pages.detailPage ? "hidden" : ""}>
+                                        <div>{dialogUser.firstname} {dialogUser.lastname}</div>
+                                        <div>{dialogUser.email}</div>
+                                    </div>
+                                    <div className={pageName !== pages.emailFormPage ? "hidden" : ""}>
+                                        <div className="flex flex-row gap-2">
+                                            <label>Email</label>
+                                            <Field type="text" className="form-control" name="email"
+                                                   onBlur={handleBlur}/>
+                                            <ErrorMessage
+                                                name="email"
+                                                component="div"
+                                                className="alert alert-danger"
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className={pageName !== pages.nameFormPage ? "hidden" : ""}>
+                                        <div className="flex flex-row gap-2">
+                                            <label>Firstname</label>
+                                            <Field type="text" className="form-control" name="firstname"
+                                                   onBlur={handleBlur}/>
+                                            <ErrorMessage
+                                                name="firstname"
+                                                component="div"
+                                                className="alert alert-danger"
+                                            />
+                                        </div>
+                                        <div className="flex flex-row gap-2" hidden={pageName !== pages.nameFormPage}>
+                                            <label>Lastname</label>
+                                            <Field type="text" className="form-control" name="lastname"
+                                                   onBlur={handleBlur}/>
+                                            <ErrorMessage
+                                                name="lastname"
+                                                component="div"
+                                                className="alert alert-danger"
+                                            />
+                                        </div>
+                                    </div>
                                 </div>
-                                <div className="form-group" hidden={pageName !== pages.emailFormPage}>
-                                    <label>Email</label>
-                                    <Field type="text" className="form-control" name="email" onBlur={handleBlur}/>
-                                    <ErrorMessage
-                                        name="email"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                </div>
-                                <div className="form-group" hidden={pageName !== pages.nameFormPage}>
-                                    <label>Firstname</label>
-                                    <Field type="text" className="form-control" name="firstname" onBlur={handleBlur}/>
-                                    <ErrorMessage
-                                        name="firstname"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                    <label>Lastname</label>
-                                    <Field type="text" className="form-control" name="lastname" onBlur={handleBlur}/>
-                                    <ErrorMessage
-                                        name="lastname"
-                                        component="div"
-                                        className="alert alert-danger"
-                                    />
-                                </div>
-                                <Button type="submit" color="primary" sx={{display: 'none'}}>Submit</Button>
+                                <Button type="submit" className="hidden" color="primary" >Submit</Button>
                             </Form>
                         </Formik>
 
                     </DialogContent>
-                    <DialogActions hidden={pageName === pages.removeWarning}>
+
+                    <DialogActions className={pageName === pages.removeWarning ? "hidden" : ""}>
                         <DialogContent style={{paddingTop: "0"}}>
-                            <div className="flex-row">
+                            <div className="flex flex-row gap-2">
                                 <Button color="warning" onClick={handleCancel}>Cancel</Button>
                                 <Button color="primary" onClick={handleDone}
                                         sx={{display: pageName !== pages.detailPage ? 'none' : 'block'}}>Save

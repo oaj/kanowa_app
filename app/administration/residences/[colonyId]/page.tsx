@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {getColonyById} from "@/lib/prisma/colonies";
 import {getResidencesByColonyId} from "@/lib/prisma/residences";
-import Residences from "./Residencies";
+import Residences from "./Residences";
 
 // Wait for better version !
 // Use: revalidateUrl('/administration/colonies/'): doesnt work.
@@ -23,7 +23,7 @@ const ResidencesPage = async ({params}: { params: { colonyId: string } }) => {
     return (
         residences && (<div>
                 <React.Fragment>
-                    <Residences colonyId={colony.id} colonyName={colony.name} residences={residences} data-superjson/>
+                    <Residences colonyId={colony.id as number} colonyName={colony.name} residences={residences} data-superjson/>
                 </React.Fragment>
             </div>
         )

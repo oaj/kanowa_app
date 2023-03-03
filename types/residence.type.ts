@@ -1,8 +1,5 @@
 import {IUser} from "./user.type";
-import {Colony, Residence, ResidenceTag, User} from "@prisma/client";
-import {ResidenceTagType} from "@/types/residence.tag.type";
-
-export type ResidencePlus = (IResidence & { owner: User, tenant: User | null, responsible: User | null, colony?: Colony, residenceTags: string[] })
+import {IResidenceTag} from "@/types/residence.tag.type";
 
 // This should be what prisma delivers
 export interface IResidence {
@@ -15,5 +12,5 @@ export interface IResidence {
         id: number,
         name: string
     },
-    residenceTags: ResidenceTagType[]
+    residenceTags: IResidenceTag[]
 }

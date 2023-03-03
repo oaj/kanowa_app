@@ -2,6 +2,8 @@ import prisma from '.'
 import {IUser} from "@/types/user.type";
 import {User} from "@prisma/client";
 
+export const revalidate = 5;
+
 // Used to select individual data in a select
 export const IUserSelect = {
     id: true,
@@ -10,6 +12,8 @@ export const IUserSelect = {
     lastname: true,
     phone: true,
     role: true,
+    active: true,
+    createdAt: true,
 }
 
 export async function getUsers() {
@@ -20,7 +24,7 @@ export async function getUsers() {
         console.log('users', users)
         return {users}
     } catch (error) {
-        throw error
+        return {error}
     }
 }
 

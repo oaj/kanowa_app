@@ -29,7 +29,7 @@ export const CssMenu = () => {
         const el = (event: MouseEvent) => {
             const element = event.target as Element;
             const isDropdownButton = element.hasAttribute("data-dropdown-button");
-            console.log('isDropdownButton', isDropdownButton)
+            // console.log('isDropdownButton', isDropdownButton)
             if (!isDropdownButton && element.closest("[data-dropdown]") != null) {
                 return
             }
@@ -38,10 +38,10 @@ export const CssMenu = () => {
             if (isDropdownButton) {
                 currentDropdown = element.closest("[data-dropdown]")
                 // currentDropdown = element.closest("." + styles.dataDropdown)
-                console.log('currentDropdown', currentDropdown)
-                console.log('currentDropdown', currentDropdown?.classList)
+                // console.log('currentDropdown', currentDropdown)
+                // console.log('currentDropdown', currentDropdown?.classList)
                 currentDropdown?.classList.toggle(styles.active)
-                console.log('currentDropdown', currentDropdown?.classList)
+                // console.log('currentDropdown', currentDropdown?.classList)
             }
             document.querySelectorAll("[data-dropdown]").forEach(dropdown => {
                 if (dropdown.classList.contains(styles.active)) {
@@ -49,12 +49,12 @@ export const CssMenu = () => {
                     dropdown.classList.remove(styles.active)
                 }
             })
-            console.log('element.classList', element.classList)
+            // console.log('element.classList', element.classList)
             if (!element.classList.contains(styles.burger) &&
                 !element.classList.contains(styles.menuHeader) &&
                 !element.classList.contains(styles.link) &&
                 !element.classList.contains(styles.dropdownMenu)) {
-                console.log('remove showFlex')
+                // console.log('remove showFlex')
                 document.querySelector("[data-menu]")?.classList.remove(styles.showFlex)
                 // menuRef.current?.classList.remove(styles.showFlex)
             }
@@ -70,7 +70,7 @@ export const CssMenu = () => {
     }
 
     const handleLogOut = (event: Event | React.SyntheticEvent) => {
-        console.log('LogOut');
+        // console.log('LogOut');
         signOut()
         handleCloseMenu();
         // EventBus.getInstance().dispatch<string>('logout');

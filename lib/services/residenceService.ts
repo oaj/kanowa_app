@@ -1,12 +1,10 @@
 import {IUser} from "@/types/user.type";
 import prisma from "@/lib/prisma";
 import ValidationError from "@/components/errors/ValidationError";
-import {IResidence} from "@/types/residence.type";
 import {IResidenceSelect} from "@/lib/prisma/residences";
-import {ResidenceTag, User} from "@prisma/client";
 import {residenceTagsConnectDisconnect} from "@/lib/services/residenceTagService";
 import {IResidenceTag} from "@/types/residence.tag.type";
-import {userConnect, userConnectOrCreate, userCreate} from "@/lib/services/userService";
+import {userConnect, userConnectOrCreate} from "@/lib/services/userService";
 
 export async function saveResidence(id: number | null,
                                     colonyId: number,
@@ -16,26 +14,26 @@ export async function saveResidence(id: number | null,
                                     tenant?: IUser | null,
                                     responsible?: IUser | null) {
 
+    const creating = id == null;
+
     // Confirm that there is a colony
     const colony = await prisma.colony.findFirst({
         where: {id: colonyId},
     })
     if (!colony) {
-        throw new ValidationError('colony', 'No colony found.')
+        throw {fieldName: 'colony', message: 'No colony found.'}
     }
     // validate that doorNumber is not taken
     const doorCheckResidence = await prisma.residence.findFirst({
         where: {
             colonyId: colonyId,
-            doorNumber: doorNumber
+            id: {not: Number(id)},
+            doorNumber: doorNumber,
         },
     })
     if (doorCheckResidence) {
-        throw new ValidationError('doorNumber', doorNumber + ' iś already taken.')
+        throw {fieldName: 'doorNumber', message: (doorNumber + ' is already taken.')}
     }
-
-    const creating = id == null;
-
     // They cant be null. If they are null choose owner
     tenant = tenant || owner
     responsible = responsible || owner
@@ -62,13 +60,13 @@ export async function saveResidence(id: number | null,
         })
         // old state is saved
         if (!formerResidence) {
-            throw new ValidationError('id', 'Residence not found.')
+            throw {fieldName: 'id', message: 'Residence not found.'}
         }
         // Old state is saved
         const orgSaved = colony.roleNotificationsSuspended && formerResidence.savedDuringRoleNotificationsSuspended;
-        formerOwner = orgSaved ? formerResidence.formerOwner : formerResidence.owner;
-        formerTenant = orgSaved ? formerResidence.formerTenant : formerResidence.tenant;
-        formerResponsible = orgSaved ? formerResidence.formerResponsible : formerResidence.responsible;
+        formerOwner = orgSaved ? formerResidence.formerOwner as IUser | null : formerResidence.owner as IUser | null;
+        formerTenant = orgSaved ? formerResidence.formerTenant as IUser | null : formerResidence.tenant as IUser | null;
+        formerResponsible = orgSaved ? formerResidence.formerResponsible as IUser | null : formerResidence.responsible as IUser | null;
     }
 
     const savedDuringRoleNotificationsSuspended = colony.roleNotificationsSuspended
@@ -81,7 +79,6 @@ export async function saveResidence(id: number | null,
 
     // Now query for save residence
     const query: any = {}
-    if (!creating) query.where = { id: Number(id) }
     query.data = {
         doorNumber: doorNumber,
         colony: {connect: {id: Number(colonyId)}},
@@ -98,7 +95,18 @@ export async function saveResidence(id: number | null,
     query.select = IResidenceSelect
     console.log('save residence query', query)
 
-    const savedResidence = prisma.residence.create(query)
+    let savedResidence = null
+    try {
+        if (creating) {
+            savedResidence = await prisma.residence.create(query)
+        } else {
+            query.where = {id: Number(id)}
+            savedResidence = await prisma.residence.update(query)
+        }
+    } catch (error: any) {
+        throw {message: error.message}
+    }
+
     return savedResidence
 }
 
