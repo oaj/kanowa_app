@@ -133,7 +133,7 @@ export const registerColony = async (
     email: string
 ) => {
 
-    return await fetch(API_URL, {
+    const result = await fetch(API_URL, {
         method: 'POST',
         headers: {
             'Content-type': 'Application/json',
@@ -147,11 +147,12 @@ export const registerColony = async (
             lastname,
             email
         })
-    }).then(async response => {
-        const data = await response.json()
-        if (response.ok) return {data: data}
-        else return {error: data}
-    })
+    }).then(response => {
+        return response.json();
+    }).catch(reason => {
+        return reason.message
+    });
+    return result
 };
 
 

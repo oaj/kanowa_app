@@ -77,8 +77,8 @@ const ColonyRegister = () => {
         } = formValue;
 
         setLoading(true);
-
-        const {data, error} = await registerColony(
+        setNameError('')
+        registerColony(
             name,
             address,
             nearBy,
@@ -86,19 +86,22 @@ const ColonyRegister = () => {
             firstname,
             lastname,
             email
-        )
-        console.log('handleRegisterColony - data', data)
-        console.log('handleRegisterColony - error',error)
-        if (error) {
-            if (error.field === 'name') setNameError(error.message)
-            else setMessage(error.message)
-        }
-        if (data) {
-            setNameError('')
-        }
-        // setLoading(false);
-        //         setMessage(resMessage)
-        //         setSuccessful(false);
+        ).then(response => {
+            setLoading(false);
+            const {colony, error} = response
+            console.log('handleRegisterColony - data', colony)
+            console.log('handleRegisterColony - error', error)
+            if (colony) {
+                console.log('Registered colony', colony)
+                setMessage('Registered ' + colony.name)
+                setSuccessful(true);
+            }
+            if (error) {
+                if (error.field === 'name') setNameError(error.message)
+                else setMessage(error.message)
+                setSuccessful(false);
+            }
+        })
     };
 
     return (
@@ -186,10 +189,10 @@ const ColonyRegister = () => {
 
                             <div className="flex place-content-between gap-2">
                                 <Button type="button" color="warning" onClick={handleCancel}>
-                                {/*<Button type="button" color="warning" disabled={loading} onClick={handleCancel}>*/}
+                                    {/*<Button type="button" color="warning" disabled={loading} onClick={handleCancel}>*/}
                                     Cancel
                                 </Button>
-                                <Button type="submit" color="primary" >Sign Up</Button>
+                                <Button type="submit" color="primary">Sign Up</Button>
                                 {/*<Button type="submit" color="primary" disabled={loading}>Sign Up</Button>*/}
                             </div>
                         </div>

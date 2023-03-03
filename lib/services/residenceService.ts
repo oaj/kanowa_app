@@ -1,6 +1,5 @@
 import {IUser} from "@/types/user.type";
 import prisma from "@/lib/prisma";
-import ValidationError from "@/components/errors/ValidationError";
 import {IResidenceSelect} from "@/lib/prisma/residences";
 import {residenceTagsConnectDisconnect} from "@/lib/services/residenceTagService";
 import {IResidenceTag} from "@/types/residence.tag.type";
@@ -21,7 +20,7 @@ export async function saveResidence(id: number | null,
         where: {id: colonyId},
     })
     if (!colony) {
-        throw {fieldName: 'colony', message: 'No colony found.'}
+        throw {field: 'colony', message: 'No colony found.'}
     }
     // validate that doorNumber is not taken
     const doorCheckResidence = await prisma.residence.findFirst({
@@ -32,7 +31,7 @@ export async function saveResidence(id: number | null,
         },
     })
     if (doorCheckResidence) {
-        throw {fieldName: 'doorNumber', message: (doorNumber + ' is already taken.')}
+        throw {field: 'doorNumber', message: (doorNumber + ' is already taken.')}
     }
     // They cant be null. If they are null choose owner
     tenant = tenant || owner
@@ -60,7 +59,7 @@ export async function saveResidence(id: number | null,
         })
         // old state is saved
         if (!formerResidence) {
-            throw {fieldName: 'id', message: 'Residence not found.'}
+            throw {field: 'id', message: 'Residence not found.'}
         }
         // Old state is saved
         const orgSaved = colony.roleNotificationsSuspended && formerResidence.savedDuringRoleNotificationsSuspended;

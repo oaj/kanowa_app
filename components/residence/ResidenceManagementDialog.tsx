@@ -24,6 +24,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
 
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
+    const [doorNumberError, setDoorNumberError] = useState<string>("");
 
     const id = residence?.id || null
 
@@ -72,20 +73,26 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
         saveResidence(id, colony.id as number, doorNumber, residenceTags, owner, tenant, responsible).then(
             (response) => {
                 const {residence, error} = response
+                setLoading(false)
                 if (residence) {
                     // revalidateUrl('/administration/residences/').then(value => {
                     //         console.log(value)
                     //         window.history.back()
                     //     }
                     // )
+                    console.log('Registered residence', residence)
                     window.history.back()
                 }
                 if (error) {
-                    console.log('dialog - error',error)
-                    setMessage(error.fieldName + ': ' +  error.message)
-                    setLoading(false)
+                    console.log('dialog - error', error)
+                    if (error.field === 'doorNumber') {
+                        setDoorNumberError(error.message)
+                    } else {
+                        setMessage(error.message)
+                    }
                 }
-            },
+            }
+            ,
             (error) => {
                 console.log('error', error);
                 console.log('error.message', error.message);
@@ -103,7 +110,8 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
                 setLoading(false);
                 setMessage(key + ' : ' + resMessage);
             }
-        );
+        )
+        ;
     };
 
     const handleCancel = () => {
@@ -142,6 +150,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
                                 component="div"
                                 className="alert alert-danger"
                             />
+                            <div className="text-red-400">{doorNumberError}</div>
                         </div>
 
                         <div className="flex flex-col">
