@@ -7,7 +7,7 @@ export const saveResidence = async (
     id: number | null,
     colonyId: number,
     doorNumber: string,
-    residenceTags: IResidenceTag[],
+    residenceTags: (IResidenceTag | null)[],
     owner: IUser | null,
     tenant: IUser | null,
     responsible: IUser | null,

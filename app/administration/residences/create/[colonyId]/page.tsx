@@ -3,7 +3,7 @@ import ColonyManagementDialog from "@/components/colony/ColonyManagementDialog";
 import ResidenceManagementDialog from "@/components/residence/ResidenceManagementDialog";
 import {getResidencesByColonyId} from "@/lib/prisma/residences";
 import {IColony} from "@/types/colony.type";
-import {getResidenceTags} from "@/lib/prisma/residenceTags";
+import {getResidenceTags} from "@/lib/prisma/residence.tags";
 
 const ColonyCreate = async ({params}: { params: { colonyId: string } }) => {
 

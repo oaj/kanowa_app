@@ -103,6 +103,7 @@ export async function saveResidence(id: number | null,
             savedResidence = await prisma.residence.update(query)
         }
     } catch (error: any) {
+        console.log(error.message)
         throw {message: error.message}
     }
 

@@ -67,7 +67,7 @@ const Residences = ({
     return (
         <div>
             <div className="">
-                <h2 className="text-center">{residences.length} Recidencies in {colonyName}</h2>
+                <h2 className="text-center">{residences.length} Residences in {colonyName}</h2>
                 <Link href={"/administration/residences/create/" + colonyId} className="">
                     <IconButton aria-label="delete" size="small">
                         <MdAddBusiness className="addIcon xx-large no-events"/>

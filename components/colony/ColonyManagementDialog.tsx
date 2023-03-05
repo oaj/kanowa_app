@@ -4,7 +4,7 @@ import {Formik, Field, Form, ErrorMessage} from "formik";
 import * as Yup from "yup";
 
 import {IUser} from "@/types/user.type";
-import {ColonyPlus, ColonyWebTypes} from "@/types/colony.type";
+import {ColonyPlus, ColonyWebTypes, IColony} from "@/types/colony.type";
 import {saveColony} from "@/services/colony.service";
 import {ContactWizard} from "../common/ContactWizard";
 import {Button} from "@mui/material";
@@ -12,19 +12,22 @@ import revalidateUrl from "@/services/revalidate.service";
 
 export const revalidate = 1
 
-const ColonyManagementDialog = ({colony}: { colony: ColonyPlus }) => {
+const ColonyManagementDialog = ({colony}: { colony: IColony }) => {
 
     const [loading, setLoading] = useState<boolean>(false);
     const [message, setMessage] = useState<string>("");
 
-    const id = colony?.id
+    const id = colony.id || null
 
     const emptyUser: IUser = {
         id: null,
         email: "",
         firstname: "",
         lastname: "",
+        role: null,
         phone: "",
+        active: false,
+        createdAt: null,
     };
     const [president, setPresident] = useState(colony.president ? colony.president : emptyUser);
     const [treasurer, setTreasurer] = useState(colony.treasurer ? colony.treasurer : emptyUser);
@@ -43,6 +46,18 @@ const ColonyManagementDialog = ({colony}: { colony: ColonyPlus }) => {
     const validationSchema = Yup.object().shape({
         name: Yup.string()
             .min(5, 'Must be 5 to 50 characters')
+            .max(50, 'Must be 5 to 50 characters')
+            .required("This field is required!"),
+        address: Yup.string()
+            .min(5, 'Must be 5 to 50 characters')
+            .max(50, 'Must be 5 to 50 characters')
+            .required("This field is required!"),
+        nearBy: Yup.string()
+            .min(5, 'Must be 5 to 50 characters')
+            .max(50, 'Must be 5 to 50 characters')
+            .required("This field is required!"),
+        city: Yup.string()
+            .min(2, 'Must be 5 to 50 characters')
             .max(50, 'Must be 5 to 50 characters')
             .required("This field is required!"),
         type: Yup.string().required("This field is required!")
@@ -129,6 +144,33 @@ const ColonyManagementDialog = ({colony}: { colony: ColonyPlus }) => {
                             <Field name="name" type="text" className="form-control"/>
                             <ErrorMessage
                                 name="name"
+                                component="div"
+                                className="alert alert-danger"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label htmlFor="address"> Address</label>
+                            <Field name="address" as="textarea"/>
+                            <ErrorMessage
+                                name="address"
+                                component="div"
+                                className="alert alert-danger"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label htmlFor="nearBy"> Near by </label>
+                            <Field name="nearBy" type="text"/>
+                            <ErrorMessage
+                                name="nearBy"
+                                component="div"
+                                className="alert alert-danger"
+                            />
+                        </div>
+                        <div className="flex flex-col">
+                            <label htmlFor="city"> City </label>
+                            <Field name="city" type="text"/>
+                            <ErrorMessage
+                                name="city"
                                 component="div"
                                 className="alert alert-danger"
                             />

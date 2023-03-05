@@ -10,6 +10,7 @@ import TableHeaderRow from "@/components/table/TableHeaderRow";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import TableDataRow from "@/components/table/TableDataRow";
 import {ColonyType} from "@prisma/client";
+import {FaTags} from "react-icons/all";
 
 type SortType = "name" | "created" | "active" | "type";
 const sortFields = {
@@ -71,7 +72,7 @@ const Colonies = ({colonies}: { colonies: IColony[] }) => {
     }
 
     const styles = {
-        colonyColumns: "grid grid-cols-[1fr_1fr_0.5fr_1fr_1fr_1fr_1fr_0.3fr_0.3fr_0.3fr] gap-x-2 p-2",
+        colonyColumns: "grid grid-cols-[1fr_1fr_0.5fr_1fr_1fr_1fr_1fr_0.3fr_0.3fr_0.3fr_0.3fr] gap-x-2 p-2",
     }
 
     return (
@@ -115,6 +116,12 @@ const Colonies = ({colonies}: { colonies: IColony[] }) => {
                                 <Link href={"/administration/residences/" + colony.id} passHref className="text-right">
                                     <IconButton size="small" title={colony.type === 'APARTMENTS' ? 'Apartments' : 'Houses'}>
                                         <MdOutlineHolidayVillage fontSize="inherit"
+                                                                 className="fill-current group-hover:fill-gray-800"/>
+                                    </IconButton>
+                                </Link>
+                                <Link href={"/administration/tags/" + colony.id} passHref className="text-right">
+                                    <IconButton size="small" title="Tags">
+                                        <FaTags fontSize="inherit"
                                                                  className="fill-current group-hover:fill-gray-800"/>
                                     </IconButton>
                                 </Link>

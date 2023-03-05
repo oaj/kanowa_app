@@ -1,7 +1,7 @@
 import prisma from '.'
 import {IResidence} from "@/types/residence.type";
 import {IUserSelect} from "@/lib/prisma/users";
-import {IResidenceTagSelect} from "@/lib/prisma/residenceTags";
+import {IResidenceTagSelect} from "@/lib/prisma/residence.tags";
 
 export const revalidate = 5;
 

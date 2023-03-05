@@ -3,10 +3,10 @@ import ColonyManagementDialog from "@/components/colony/ColonyManagementDialog";
 import ResidenceManagementDialog from "@/components/residence/ResidenceManagementDialog";
 import {getResidenceById, getResidencesByColonyId} from "@/lib/prisma/residences";
 import {IColony} from "@/types/colony.type";
-import {getResidenceTags} from "@/lib/prisma/residenceTags";
+import {getResidenceTags} from "@/lib/prisma/residence.tags";
 import {IResidence} from "@/types/residence.type";
 
-const ResidenceCreate = async ({params}: { params: { colonyId: string, residenceId: string} }) => {
+const ResidenceEdit = async ({params}: { params: { colonyId: string, residenceId: string} }) => {
 
     const colonyId = params.colonyId
     const residenceId = params.residenceId
@@ -28,4 +28,4 @@ const ResidenceCreate = async ({params}: { params: { colonyId: string, residence
         <ResidenceManagementDialog colony={colony} residence={residence} residenceTags={residenceTags} data-superjson/>
     )
 };
-export default ResidenceCreate;
+export default ResidenceEdit;

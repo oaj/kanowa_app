@@ -12,8 +12,8 @@ datasource db {
 
 //------------------------------------
 //                Run after edit :
-//                npx prisma generate
-//                npx prisma db push
+//                pnpx prisma generate
+//                pnpx prisma db push
 //                restart ide
 //------------------------------------
 
@@ -48,7 +48,7 @@ model User {
 
 model Colony {
   id                                    Int            @id @default(autoincrement())
-  name                                  String
+  name                                  String @unique
   createdAt                             DateTime       @default(now())
   updatedAt                             DateTime       @updatedAt
   active                                Boolean        @default(false)
@@ -71,7 +71,6 @@ model Colony {
   treasurerId                           Int?
   secretary                             User?          @relation("secretaries", fields: [secretaryId], references: [id])
   secretaryId                           Int?
-  // todo: buildings                             Building[]
   residences                            Residence[]
   residenceTags                         ResidenceTag[]
 }
@@ -97,15 +96,17 @@ model Residence {
   balance                               Decimal        @default(0.0)
   deleted                               Boolean        @default(false)
   savedDuringRoleNotificationsSuspended Boolean        @default(false)
+  @@unique([colonyId, doorNumber])
 }
 
 model ResidenceTag {
   id         Int         @id @default(autoincrement())
   colony     Colony      @relation(fields: [colonyId], references: [id])
   colonyId   Int
-  residences Residence[]
-  name       String      @unique
+  name       String
   deleted    Boolean     @default(false)
+  residences Residence[]
+  @@unique([colonyId, name])
 }
 
 enum ColonyType {

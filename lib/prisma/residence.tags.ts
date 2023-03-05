@@ -1,5 +1,7 @@
 import prisma from '.'
 import {IResidenceTag} from "@/types/residence.tag.type";
+import {IResidence} from "@/types/residence.type";
+import {IResidenceSelect} from "@/lib/prisma/residences";
 
 export const revalidate = 5;
 
@@ -12,28 +14,25 @@ export async function getResidenceTags(colonyId: number) {
 
     try {
         let residenceTags: IResidenceTag[] = await prisma.residenceTag.findMany({
-            select: IResidenceTagSelect
-        })
-        return {residenceTags}
-    } catch (error) {
-        return {error}
-    }
-}
-
-export async function getResidenceTagsByResidenceId(residenceId: number) {
-    console.log('getResidenceTagsByResidenceId', residenceId)
-
-    try {
-        const residenceTags: IResidenceTag[] = await prisma.residenceTag.findMany({
             where: {
-                id: residenceId
+                colonyId: colonyId
             },
             select: IResidenceTagSelect
         })
-
         return {residenceTags}
     } catch (error) {
         return {error}
     }
 }
 
+export async function getResidenceTagById(id: number) {
+    try {
+        const residenceTag: IResidenceTag | null = await prisma.residenceTag.findUnique({
+            where: {id: Number(id)},
+            select: IResidenceTagSelect,
+        })
+        return {residenceTag}
+    } catch (error) {
+        return {error}
+    }
+}

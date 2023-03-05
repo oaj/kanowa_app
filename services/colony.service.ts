@@ -33,7 +33,7 @@ const API_URL = "http://localhost:3000/api/colony/";
 // };
 
 export const saveColony = async (
-    id: number,
+    id: number | null,
     name: string,
     address: string,
     nearBy: string,

@@ -44,9 +44,10 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
 
     const initialValues = useRef({
         doorNumber: residence?.doorNumber || '',
-        residenceTags: residence?.residenceTags || []
+        tags: residence?.residenceTags.map(tag => tag.name) as string[]
     });
-
+    console.log('residence?.residenceTags', residence?.residenceTags)
+    console.log('initialValues.current.tags', initialValues.current.tags)
     const validationSchema = Yup.object().shape({
         doorNumber: Yup.string()
             .min(1, 'Must be 1 to 20 characters')
@@ -56,9 +57,11 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
 
     const handleSaveResidence = (formValue: {
         doorNumber: string,
-        residenceTags: IResidenceTag[],
+        tags: string[],
     }) => {
-        const {doorNumber, residenceTags} = formValue;
+        const {doorNumber, tags} = formValue;
+
+        const resTags = tags.map(tag => residenceTags?.find(residenceTag => residenceTag.name === tag))
 
         setMessage("");
         console.log('Handle Save Residence')
@@ -66,11 +69,11 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
         console.log("owner", owner);
         console.log("tenant", tenant);
         console.log("responsible", responsible);
-        console.log("residenceTags", residenceTags);
+        console.log("resTags", resTags);
 
         setLoading(true);
 
-        saveResidence(id, colony.id as number, doorNumber, residenceTags, owner, tenant, responsible).then(
+        saveResidence(id, colony.id as number, doorNumber, resTags as IResidenceTag[], owner, tenant, responsible).then(
             (response) => {
                 const {residence, error} = response
                 setLoading(false)
@@ -111,8 +114,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
                 setMessage(key + ' : ' + resMessage);
             }
         )
-        ;
-    };
+    }
 
     const handleCancel = () => {
         window.history.back()
@@ -155,21 +157,21 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
 
                         <div className="flex flex-col">
 
-                            <label htmlFor="residenceTags">Tags</label>
+                            <label htmlFor="tags">Tags</label>
                             <Field
                                 component="select"
-                                id="residenceTags"
-                                name="residenceTags"
+                                id="tags"
+                                name="tags"
                                 multiple={true}
                             >
                                 {
                                     residenceTags?.map((tag) => {
-                                        return <option key={tag.id} value={tag.id}>tag.New York</option>
+                                        return <option key={tag.name} value={tag.name}>{tag.name}</option>
                                     })
                                 }
                             </Field>
                             <ErrorMessage
-                                name="residenceTags"
+                                name="tags"
                                 component="div"
                                 className="alert alert-danger"
                             />

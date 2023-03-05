@@ -9,8 +9,12 @@ export type ColonyPlus = (Colony & { president: User, treasurer: User | null, se
 export interface IColony {
   id?: number,
   name: string,
+  address: string,
+  nearBy: string,
+  city: string,
   createdAt: Date,
   active: boolean,
+  roleNotificationsSuspended: boolean,
   president: IUser,
   treasurer?: IUser | null,
   secretary?: IUser | null,
