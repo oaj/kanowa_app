@@ -4,7 +4,6 @@ specifiers:
   '@babel/core': '>=7.0.0 <8.0.0'
   '@emotion/react': ^11.10.5
   '@emotion/styled': ^11.10.5
-  '@mui/icons-material': ^5.11.0
   '@mui/material': ^5.11.7
   '@prisma/client': ^4.11.0
   '@react-email/container': 0.0.7
@@ -35,7 +34,7 @@ specifiers:
   react-dom: 18.2.0
   react-email: 1.7.13
   react-i18next: ^12.1.5
-  react-icons: ^4.7.1
+  react-icons: ^4.8.0
   react-moment: ^1.1.2
   server-only: ^0.0.1
   superjson: ^1.12.2
@@ -48,7 +47,6 @@ dependencies:
   '@babel/core': 7.20.12
   '@emotion/react': 11.10.5_jp5qgyg6plq757v5hojp7ls2oe
   '@emotion/styled': 11.10.5_jp5djshq6aqfasno3mth3hguci
-  '@mui/icons-material': 5.11.0_6qoy6f6d6nax4kxrhs633za6sa
   '@mui/material': 5.11.7_lskpmcsdi7ipu6qpuapyu56ihm
   '@prisma/client': 4.11.0_prisma@4.11.0
   '@react-email/container': 0.0.7
@@ -74,7 +72,7 @@ dependencies:
   react-dom: 18.2.0_react@18.2.0
   react-email: 1.7.13
   react-i18next: 12.1.5_3yopsigl4h4eb2nqrqfsy65uwi
-  react-icons: 4.7.1_react@18.2.0
+  react-icons: 4.8.0_react@18.2.0
   react-moment: 1.1.2_mmavuqf6ek6upnyryxchoaliru
   server-only: 0.0.1
   superjson: 1.12.2
@@ -758,23 +756,6 @@ packages:
 
   /@mui/core-downloads-tracker/5.11.7:
     resolution: {integrity: sha512-lZgX7XQTk0zVcpwEa80r+T4y09dosnUxWvFPSikU/2Hh5wnyNOek8WfJwGCNsaRiXJHMi5eHY+z8oku4u5lgNw==}
-    dev: false
-
-  /@mui/icons-material/5.11.0_6qoy6f6d6nax4kxrhs633za6sa:
-    resolution: {integrity: sha512-I2LaOKqO8a0xcLGtIozC9xoXjZAto5G5gh0FYUMAlbsIHNHIjn4Xrw9rvjY20vZonyiGrZNMAlAXYkY6JvhF6A==}
-    engines: {node: '>=12.0.0'}
-    peerDependencies:
-      '@mui/material': ^5.0.0
-      '@types/react': ^17.0.0 || ^18.0.0
-      react: ^17.0.0 || ^18.0.0
-    peerDependenciesMeta:
-      '@types/react':
-        optional: true
-    dependencies:
-      '@babel/runtime': 7.20.7
-      '@mui/material': 5.11.7_lskpmcsdi7ipu6qpuapyu56ihm
-      '@types/react': 18.0.26
-      react: 18.2.0
     dev: false
 
   /@mui/material/5.11.7_lskpmcsdi7ipu6qpuapyu56ihm:
@@ -3819,8 +3800,8 @@ packages:
       react-dom: 18.2.0_react@18.2.0
     dev: false
 
-  /react-icons/4.7.1_react@18.2.0:
-    resolution: {integrity: sha512-yHd3oKGMgm7zxo3EA7H2n7vxSoiGmHk5t6Ou4bXsfcgWyhfDKMpyKfhHR6Bjnn63c+YXBLBPUql9H4wPJM6sXw==}
+  /react-icons/4.8.0_react@18.2.0:
+    resolution: {integrity: sha512-N6+kOLcihDiAnj5Czu637waJqSnwlMNROzVZMhfX68V/9bu9qHaMIJC4UdozWoOk57gahFCNHwVvWzm0MTzRjg==}
     peerDependencies:
       react: '*'
     dependencies:

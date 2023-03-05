@@ -9,8 +9,8 @@ import {IconButton} from "@mui/material";
 import TableHeaderRow from "@/components/table/TableHeaderRow";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import TableDataRow from "@/components/table/TableDataRow";
-import {ColonyType} from "@prisma/client";
-import {FaTags} from "react-icons/all";
+import {FaTags} from "react-icons/fa";
+
 
 type SortType = "name" | "created" | "active" | "type";
 const sortFields = {

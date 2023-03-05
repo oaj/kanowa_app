@@ -1,9 +1,8 @@
 "use client"
 import React from 'react'
-import {Button, Grid, IconButton, Stack, Tooltip} from "@mui/material";
+import {Button, Grid, IconButton, Tooltip} from "@mui/material";
 import Link from "next/link";
 import {MdEdit, MdHighlightOff} from "react-icons/md";
-import DeleteIcon from "@mui/icons-material/Delete";
 
 export default function Home() {
     return (
@@ -16,9 +15,6 @@ export default function Home() {
                 </Button>
                 <Button variant="contained">Contained</Button>
                 <Button variant="outlined">Outlined</Button>
-                <Tooltip title="Edit" placement="top-end">
-                    <MdEdit className="larger"/>
-                </Tooltip>
                 <Link href="/administration/users" passHref>
                     <Button variant="contained" color="secondary">Users</Button>
                 </Link>
@@ -27,20 +23,6 @@ export default function Home() {
                         <MdHighlightOff className="larger"/>Delete
                     </IconButton>
                 </Tooltip>
-            </div>
-            <div className="flex gap-2">
-                <IconButton aria-label="delete" size="small">
-                    <DeleteIcon fontSize="inherit"/>
-                </IconButton>
-                <IconButton aria-label="delete" size="small">
-                    <DeleteIcon fontSize="small"/>
-                </IconButton>
-                <IconButton aria-label="delete" size="large">
-                    <DeleteIcon/>
-                </IconButton>
-                <IconButton aria-label="delete" size="large">
-                    <DeleteIcon fontSize="inherit"/>
-                </IconButton>
             </div>
         </div>
     )
