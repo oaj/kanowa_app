@@ -14,19 +14,15 @@ const ResidencesPage = async ({params}: { params: { colonyId: string } }) => {
 
     if (colError) return <div>colError.message</div>
 
-    if (!colony)  return <div>No Colony</div>
-
-    const { residences, error } = await getResidencesByColonyId(parseInt(id))
-
-    if (error) return <div>error.message</div>
+    if (!colony) return <div>No Colony</div>
 
     return (
-        residences && (<div>
-                <React.Fragment>
-                    <Residences colonyId={colony.id as number} colonyName={colony.name} residences={residences} data-superjson/>
-                </React.Fragment>
-            </div>
-        )
+        <div>
+            <React.Fragment>
+                <Residences colonyId={colony.id as number} colonyName={colony.name}
+                            residences={colony.residences} residenceTags={colony.residenceTags} data-superjson/>
+            </React.Fragment>
+        </div>
     );
 }
 export default ResidencesPage;

@@ -8,23 +8,27 @@ import TableHeaderRow from "@/components/table/TableHeaderRow";
 import TableHeaderCell from "@/components/table/TableHeaderCell";
 import TableDataRow from "@/components/table/TableDataRow";
 import {IResidence} from "@/types/residence.type";
+import {IResidenceTag} from "@/types/residence.tag.type";
+import MuiSelect from "@/components/common/mui.dropdown.multi/MuiSelect";
+
 
 type SortType = "doorNumber";
 const sortFields = {
     "doorNumber": (residence: IResidence) => residence.doorNumber,
 }
 
-const Residences = ({
-                        colonyId,
+const Residences = ({   colonyId,
                         colonyName,
-                        residences
-                    }: { colonyId: number, colonyName: string, residences: IResidence[] }) => {
+                        residences,
+                        residenceTags,
+                    }: { colonyId: number, colonyName: string, residences: IResidence[], residenceTags: IResidenceTag[] }) => {
     const [filteredSortedResidences, setFilteredSortedResidences] = useState<IResidence[]>([]);
 
     const [sort, setSort] = useState<SortType>("doorNumber");
     const [ascending, setAscending] = useState<boolean>(true);
 
     const [filterText, setFilterText] = useState<string>("");
+    const [filterTags, setFilterTags] = useState<string[]>([]);
 
     const setSorting = (newSort: SortType) => {
         console.log(newSort)
@@ -36,10 +40,22 @@ const Residences = ({
         return a ? 1 : -1;
     }
 
-
     const changeFilterText = (event: ChangeEvent) => {
         setFilterText((event.target as HTMLInputElement).value);
         console.log('filterText', filterText)
+    }
+
+    const changeTagFilter = (event: React.SyntheticEvent, newValue: string[]) => {
+        console.log('changeTagFilter - newValue', newValue)
+        setFilterTags(newValue)
+    }
+
+    function intersect(arr1: any[], arr2: any[]) {
+        return arr1.filter(elm => arr2.indexOf(elm) > -1)
+    }
+
+    function hasIntersect(arr1: any[], arr2: any[]) {
+        return intersect(arr1, arr2).length > 0
     }
 
     useEffect(() => {
@@ -51,10 +67,11 @@ const Residences = ({
 
         let fsResidences: IResidence[] | null;
         fsResidences = residences?.sort((a, b) => sorter(a, b))
-            .filter(residence => filterText ? (residence.doorNumber.toLowerCase().includes(filterText.toLowerCase())) : true);
+            .filter(residence => filterText ? (residence.doorNumber.toLowerCase().includes(filterText.toLowerCase())) : true)
+            .filter(residence => filterTags.length > 0 ? hasIntersect(residence.residenceTags.map(t => t.name), filterTags) : true)
         setFilteredSortedResidences(fsResidences)
 
-    }, [residences, ascending, sort, filterText])
+    }, [residences, ascending, sort, filterText, filterTags])
 
     const handleClearNameFilter = () => {
         setFilterText("")
@@ -76,8 +93,11 @@ const Residences = ({
                 </Link>
             </div>
             <div className="bg-gray-800 flex gap-2 items-center px-4 py-2">
-                <div className="flex-1">Set filter:</div>
-                By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeFilterText}/>
+                <div className="">Set filter:</div>
+                <div className="flex-1">
+                    <MuiSelect value={filterTags} options={residenceTags.map(tag => tag.name)} onChange={changeTagFilter} />
+                </div>
+                <div>By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeFilterText}/></div>
                 <MdCancel className="cursor-pointer text-xl" onClick={handleClearNameFilter}/>
             </div>
             <div>

@@ -2,6 +2,7 @@ import prisma from '.'
 import {IColony} from "@/types/colony.type";
 import {IUserSelect} from "@/lib/prisma/users";
 import {IResidenceSelect} from "@/lib/prisma/residences";
+import {IResidenceTagSelect} from "@/lib/prisma/residence.tags";
 
 export const revalidate = 5;
 
@@ -27,7 +28,10 @@ export const IColonySelect = {
     },
     residences: {
         select: IResidenceSelect
-    }
+    },
+    residenceTags: {
+        select: IResidenceTagSelect
+    },
 }
 
 export async function getColonies() {

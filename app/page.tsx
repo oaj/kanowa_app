@@ -15,7 +15,7 @@ export default function Home() {
                 </Button>
                 <Button variant="contained">Contained</Button>
                 <Button variant="outlined">Outlined</Button>
-                <Link href="/administration/users" passHref>
+                <Link href="/administration/users/" passHref>
                     <Button variant="contained" color="secondary">Users</Button>
                 </Link>
                 <Tooltip title="Delete">

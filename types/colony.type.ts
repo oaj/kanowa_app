@@ -2,6 +2,7 @@ import {IUser} from "./user.type";
 import {IResidence} from "./residence.type";
 import {Colony, User, Residence} from "@prisma/client";
 import {ColonyType} from "@prisma/client";
+import {IResidenceTag} from "@/types/residence.tag.type";
 
 export type ColonyPlus = (Colony & { president: User, treasurer: User | null, secretary: User | null , residences?: Residence[]})
 
@@ -21,6 +22,7 @@ export interface IColony {
   type: ColonyType | null,
   updatedAt: Date,
   residences: IResidence[],
+  residenceTags: IResidenceTag[]
 }
 export interface IColonyManagement {
   id?: string,

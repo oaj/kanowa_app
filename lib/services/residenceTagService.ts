@@ -1,32 +1,22 @@
-import {ResidenceTag} from "@prisma/client";
 import {IResidenceTag} from "@/types/residence.tag.type";
-import {IUser} from "@/types/user.type";
 import prisma from "@/lib/prisma";
-import {userConnect, userConnectOrCreate} from "@/lib/services/userService";
-import {IResidenceSelect} from "@/lib/prisma/residences";
 
 export const residenceTagsConnectDisconnect = (newResidenceTags: IResidenceTag[], oldResidenceTags?: IResidenceTag[]) => {
-    const idFromNew = (name: string) => newResidenceTags?.find(tag => tag.name === name)?.id
-    const idFromOld = (name: string) => oldResidenceTags?.find(tag => tag.name === name)?.id
-
-    const newTagNames = newResidenceTags.map(tag => tag.name)
     oldResidenceTags = oldResidenceTags || []
-
-    const oldTagNames = oldResidenceTags.map(tag => tag.name)
-
     // old tags gone
-    const toBeDisconnected = oldTagNames.filter(name => !newTagNames.includes(name))
+    const toBeDisconnectedTags = oldResidenceTags.filter(oldTag => !newResidenceTags.find(newTag => newTag.id === oldTag.id))
     // new arrivals
-    const toBeConnected = newTagNames.filter(name => !oldTagNames.includes(name))
+    const toBeConnectedTags = newResidenceTags.filter(newTag => !oldResidenceTags?.find(oldTag => oldTag.id === newTag.id))
+
     let disconnectQuery: any = null
-    if (toBeDisconnected.length > 0) {
+    if (toBeDisconnectedTags.length > 0) {
         disconnectQuery = {disconnect: []}
-        toBeDisconnected.forEach(name => disconnectQuery.disconnect.push({id: Number(idFromOld(name))}))
+        toBeDisconnectedTags.forEach(tag => disconnectQuery.disconnect.push({id: tag.id}))
     }
     let connectQuery: any = null
-    if (toBeConnected.length > 0) {
+    if (toBeConnectedTags.length > 0) {
         connectQuery = {connect: []}
-        toBeConnected.forEach(name => connectQuery.connect.push({id: Number(idFromNew(name))}))
+        toBeConnectedTags.forEach(tag => connectQuery.connect.push({id: tag.id}))
     }
 
     let res: any = null
@@ -35,7 +25,6 @@ export const residenceTagsConnectDisconnect = (newResidenceTags: IResidenceTag[]
         if (disconnectQuery != null) res.disconnect = disconnectQuery.disconnect
         if (connectQuery != null) res.connect = connectQuery.connect
     }
-    console.log('residenceTagsConnectDisconnect', res)
     return res
 }
 

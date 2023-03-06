@@ -15,7 +15,7 @@
     "@babel/core": ">=7.0.0 <8.0.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
-    "@mui/material": "^5.11.7",
+    "@mui/material": "^5.11.12",
     "@prisma/client": "^4.11.0",
     "@react-email/container": "0.0.7",
     "@react-email/html": "0.0.4",

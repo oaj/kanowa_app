@@ -158,12 +158,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}:
                         <div className="flex flex-col">
 
                             <label htmlFor="tags">Tags</label>
-                            <Field
-                                component="select"
-                                id="tags"
-                                name="tags"
-                                multiple={true}
-                            >
+                            <Field component="select" id="tags" name="tags" multiple={true} >
                                 {
                                     residenceTags?.map((tag) => {
                                         return <option key={tag.name} value={tag.name}>{tag.name}</option>
