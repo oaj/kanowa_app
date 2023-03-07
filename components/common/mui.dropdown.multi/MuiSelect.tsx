@@ -13,6 +13,7 @@ export default function MuiSelect({id, options, value, onChange}: Props) {
 
     return (
         <Autocomplete
+
             multiple
             id={id || undefined}
             options={options}

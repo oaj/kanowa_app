@@ -42,11 +42,11 @@ const Residences = ({   colonyId,
 
     const changeFilterText = (event: ChangeEvent) => {
         setFilterText((event.target as HTMLInputElement).value);
-        console.log('filterText', filterText)
+        // console.log('filterText', filterText)
     }
 
     const changeTagFilter = (event: React.SyntheticEvent, newValue: string[]) => {
-        console.log('changeTagFilter - newValue', newValue)
+        // console.log('changeTagFilter - newValue', newValue)
         setFilterTags(newValue)
     }
 
