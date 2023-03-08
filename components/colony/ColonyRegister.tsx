@@ -1,10 +1,11 @@
 "use client"
-import {FormEvent, useState} from "react";
-import {Formik, Field, Form, ErrorMessage} from "formik";
+import {useState} from "react";
+import {useFormik} from "formik";
 import * as Yup from "yup";
 
 import {registerColony} from "@/services/colony.service";
 import {Button} from "@mui/material";
+import TextFieldFormikMui from "@/components/common/formik.mui/TextField";
 
 const ColonyRegister = () => {
     const [successful, setSuccessful] = useState<boolean>(false);
@@ -104,96 +105,38 @@ const ColonyRegister = () => {
         })
     };
 
+    const formik = useFormik({
+        initialValues: initialValues,
+        validationSchema: validationSchema,
+        onSubmit: handleRegisterColony
+    });
+
     return (
         <div className="p-2">
             <div className="text-2xl pt-4">Register kanowa</div>
-            <Formik
-                initialValues={initialValues}
-                validationSchema={validationSchema}
-                onSubmit={handleRegisterColony}
-            >
-                <Form>
+            <form onSubmit={formik.handleSubmit}>
                     {!successful && (
                         <div className="flex flex-col gap-2 pt-4">
-                            <div className="flex flex-col">
-                                <label htmlFor="name"> Name </label>
-                                <Field id="name" name="name" type="text"/>
-                                <ErrorMessage
-                                    name="name"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                                <div className="text-red-400">{nameError}</div>
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label htmlFor="address"> Address</label>
-                                <Field name="address" as="textarea"/>
-                                <ErrorMessage
-                                    name="address"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label htmlFor="nearBy"> Near by </label>
-                                <Field name="nearBy" type="text"/>
-                                <ErrorMessage
-                                    name="nearBy"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label htmlFor="city"> City </label>
-                                <Field name="city" type="text"/>
-                                <ErrorMessage
-                                    name="city"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-
+                            <TextFieldFormikMui formik={formik} name="name" label="Name"/>
+                            {nameError && <div className="text-red-500">{nameError}</div>}
+                            <TextFieldFormikMui name="address" formik={formik} label="Address" multiline={true} rows="4"/>
+                            <TextFieldFormikMui formik={formik} name="nearBy" label="Near by"/>
+                            <TextFieldFormikMui formik={formik} name="city" label="City"/>
                             <div className="text-xl pt-4">President:</div>
-                            <div className="flex flex-col">
-                                <label htmlFor="firstname"> Firstname </label>
-                                <Field name="firstname" type="text"/>
-                                <ErrorMessage
-                                    name="firstname"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label htmlFor="lastname"> Lastname </label>
-                                <Field name="lastname" type="text"/>
-                                <ErrorMessage
-                                    name="lastname"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
-
-                            <div className="flex flex-col">
-                                <label htmlFor="email"> Email </label>
-                                <Field name="email" type="email"/>
-                                <ErrorMessage
-                                    name="email"
-                                    component="div"
-                                    className="alert alert-danger"
-                                />
-                            </div>
+                            <TextFieldFormikMui formik={formik} name="firstname" label="Firstname"/>
+                            <TextFieldFormikMui formik={formik} name="lastname" label="Lastname"/>
+                            <TextFieldFormikMui formik={formik} name="email" label="Email"/>
 
                             <div className="flex place-content-between gap-2">
-                                <Button type="button" color="warning" onClick={handleCancel}>
-                                    {/*<Button type="button" color="warning" disabled={loading} onClick={handleCancel}>*/}
+                                <Button type="button" color="warning" variant="outlined" onClick={handleCancel}>
                                     Cancel
                                 </Button>
-                                <Button type="submit" color="primary">Sign Up</Button>
-                                {/*<Button type="submit" color="primary" disabled={loading}>Sign Up</Button>*/}
+                                <Button type="submit" color="primary" variant="outlined" disabled={loading}>
+                                    {loading && (
+                                        <span className="">Loading...</span>
+                                    )}
+                                    Sign Up
+                                </Button>
                             </div>
                         </div>
                     )}
@@ -210,8 +153,7 @@ const ColonyRegister = () => {
                             </div>
                         </div>
                     )}
-                </Form>
-            </Formik>
+                </form>
         </div>
     );
 };

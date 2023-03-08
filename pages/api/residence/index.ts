@@ -4,7 +4,6 @@ import {saveResidence} from "@/lib/services/residenceService";
 import {IResidenceTag} from "@/types/residence.tag.type";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
-    console.log('req', req)
     console.log('req.method', req.method)
 
     if (["POST", "PUT"].includes(req.method as string)) {

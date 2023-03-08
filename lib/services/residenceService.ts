@@ -12,7 +12,7 @@ export async function saveResidence(id: number | null,
                                     owner: IUser,
                                     tenant?: IUser | null,
                                     responsible?: IUser | null) {
-
+    console.log('saveResidence')
     const creating = id == null;
 
     // Confirm that there is a colony
@@ -41,7 +41,6 @@ export async function saveResidence(id: number | null,
     let formerOwner: IUser | null = null
     let formerTenant: IUser | null = null
     let formerResponsible: IUser | null = null
-
     let formerResidence = null
     // residence is loaded to get the former contacts
     if (!creating) { // id != null
@@ -77,18 +76,22 @@ export async function saveResidence(id: number | null,
     // }
 
     // Now query for save residence
+    console.log('Før query')
     const query: any = {}
     query.data = {
         doorNumber: doorNumber,
         colony: {connect: {id: Number(colonyId)}},
         savedDuringRoleNotificationsSuspended: savedDuringRoleNotificationsSuspended,
     }
+    console.log('1')
     query.data.owner = owner.id ? {connect: userConnect(owner)} : {connectOrCreate: userConnectOrCreate(owner)}
     query.data.tenant = tenant.id ? {connect: userConnect(tenant)} : {connectOrCreate: userConnectOrCreate(tenant)}
     query.data.responsible = responsible.id ? {connect: userConnect(responsible)} : {connectOrCreate: userConnectOrCreate(responsible)}
+    console.log('2')
     if (formerOwner) query.data.formerOwner = {connect: userConnect(formerOwner)}
     if (formerTenant) query.data.formerTenant = {connect: userConnect(formerTenant)}
     if (formerResponsible) query.data.formerResponsible = {connect: userConnect(formerResponsible)}
+    console.log('Før tags')
     const residenceTagsQuery = residenceTagsConnectDisconnect(residenceTags, formerResidence?.residenceTags)
     if (residenceTagsQuery != null) query.data.residenceTags = residenceTagsQuery
     query.select = IResidenceSelect

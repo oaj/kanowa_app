@@ -85,9 +85,9 @@ const Residences = ({   colonyId,
         <div>
             <div className="">
                 <h2 className="text-center">{residences.length} Residences in {colonyName}</h2>
-                <Link href={"/administration/residences/create/" + colonyId} className="">
+                <Link href={"/administration/residences/create/" + colonyId} >
                     <IconButton aria-label="delete" size="small">
-                        <MdAddBusiness className="addIcon xx-large no-events"/>
+                        <MdAddBusiness className="no-events"/>
                         New Residence
                     </IconButton>
                 </Link>
