@@ -6,8 +6,9 @@ type TextFieldProps = {
     formik: any,
     multiline?: boolean,
     rows?: string,
+    className?: string,
 }
-export default function TextFieldFormikMui({name, label, multiline, rows, formik}: TextFieldProps) {
+export default function TextFieldFormikMui({name, label, multiline, rows, formik, className}: TextFieldProps) {
     return (
         <TextField
             fullWidth
@@ -20,6 +21,7 @@ export default function TextFieldFormikMui({name, label, multiline, rows, formik
             onChange={formik.handleChange}
             error={formik.touched[name] && Boolean(formik.errors[name])}
             helperText={formik.touched[name] && formik.errors[name]}
+            className={className}
         />
     )
 }

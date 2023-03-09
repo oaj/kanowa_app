@@ -1,7 +1,5 @@
 import {NextApiRequest, NextApiResponse} from "next";
-import prisma from "@/lib/prisma";
 import {registerColony} from "@/lib/services/colonyService";
-import {saveResidence} from "@/lib/services/residenceService";
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
     if (req.method === "POST") {

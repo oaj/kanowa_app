@@ -14,10 +14,11 @@ import {MdArrowBackIos} from "react-icons/md";
 import {MdArrowForwardIos} from "react-icons/md";
 import {MdEdit} from "react-icons/md";
 
-import {ErrorMessage, Field, Form, Formik} from "formik";
+import {ErrorMessage, Field, Form, Formik, useFormik} from "formik";
 import * as Yup from "yup";
 import {getUserByEmail} from "@/services/user.service";
 import {IUser} from "@/types/user.type";
+import TextFieldFormikMui from "@/components/common/formik.mui/TextField";
 // import "./ContactWizard.css"
 
 type ContactState = {
@@ -314,8 +315,16 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
         }
     }
 
+    const formik = useFormik({
+        initialValues: dialogUser,
+        enableReinitialize: true,
+        validationSchema: validationSchema,
+        validateOnBlur: true,
+        onSubmit: handleSubmit
+    });
+
     return (
-        <div className="border border-color-gray-500 border-solid rounded-md p-2">
+        <div className="border border-gray-600 hover:border-gray-200 border-solid rounded-[5px] p-2">
             <div className="flex-row">
                 <div className="label spacer">{fieldName}</div>
                 <div>{user.firstname + " " + user.lastname}</div>
@@ -356,92 +365,56 @@ export const ContactWizard = ({fieldName, user, scopeUsers, emailRequired, setUs
                         {/*<div><span>Page: {dialogUser.pageName}</span></div>*/}
                     </DialogTitle>
                     <DialogContent>
-                        <Formik
-                            enableReinitialize
-                            initialValues={dialogUser}
-                            validationSchema={validationSchema}
-                            validateOnBlur={true}
-                            onSubmit={handleSubmit}>
-
-                            <Form id="form">
-                                {/*<FormObserver/>*/}
+                            <form id="form" onSubmit={formik.handleSubmit}>
                                 <div className={pageName !== pages.removeWarning ? "hidden" : ""}>
                                     <div>
                                         <p>Please, to remove the contact, click the button below.</p>
-                                        <div className="flex flex-row">
+                                        <div className="flex flex-row gap-2">
                                             <div className="spacer">
-                                                <Button color="warning" onClick={handleCancel}>
+                                                <Button variant="outlined" color="warning" onClick={handleCancel}>
                                                     Cancel
                                                 </Button>
                                             </div>
                                             <div>
-                                                <Button color="primary" onClick={clearContact}>
+                                                <Button variant="outlined" color="primary" onClick={clearContact}>
                                                     Remove
                                                 </Button>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div className="flex flex-col gap-2">
+                                <div className="flex flex-col gap-4">
                                     <div className={pageName !== pages.detailPage ? "hidden" : ""}>
                                         <div>{dialogUser.firstname} {dialogUser.lastname}</div>
                                         <div>{dialogUser.email}</div>
                                     </div>
-                                    <div className={pageName !== pages.emailFormPage ? "hidden" : ""}>
-                                        <div className="flex flex-row gap-2">
-                                            <label>Email</label>
-                                            <Field type="text" className="form-control" name="email"
-                                                   onBlur={handleBlur}/>
-                                            <ErrorMessage
-                                                name="email"
-                                                component="div"
-                                                className="alert alert-danger"
-                                            />
-                                        </div>
+                                    <div className={pageName !== pages.emailFormPage ? "hidden" : "mt-2"}>
+                                        <TextFieldFormikMui formik={formik} name="email" label="Email"/>
                                     </div>
-                                    <div className={pageName !== pages.nameFormPage ? "hidden" : ""}>
-                                        <div className="flex flex-row gap-2">
-                                            <label>Firstname</label>
-                                            <Field type="text" className="form-control" name="firstname"
-                                                   onBlur={handleBlur}/>
-                                            <ErrorMessage
-                                                name="firstname"
-                                                component="div"
-                                                className="alert alert-danger"
-                                            />
-                                        </div>
-                                        <div className="flex flex-row gap-2" hidden={pageName !== pages.nameFormPage}>
-                                            <label>Lastname</label>
-                                            <Field type="text" className="form-control" name="lastname"
-                                                   onBlur={handleBlur}/>
-                                            <ErrorMessage
-                                                name="lastname"
-                                                component="div"
-                                                className="alert alert-danger"
-                                            />
-                                        </div>
+                                    <div className={pageName !== pages.nameFormPage ? "hidden" : "flex flex-col gap-2 mt-2"}>
+                                        <TextFieldFormikMui formik={formik} name="firstname" label="Firstname"/>
+                                        <TextFieldFormikMui formik={formik} name="lastname" label="Lastname"/>
                                     </div>
                                 </div>
                                 <Button type="submit" className="hidden" color="primary" >Submit</Button>
-                            </Form>
-                        </Formik>
+                            </form>
 
                     </DialogContent>
 
                     <DialogActions className={pageName === pages.removeWarning ? "hidden" : ""}>
                         <DialogContent style={{paddingTop: "0"}}>
                             <div className="flex flex-row gap-2">
-                                <Button color="warning" onClick={handleCancel}>Cancel</Button>
-                                <Button color="primary" onClick={handleDone}
+                                <Button variant="outlined" color="warning" onClick={handleCancel}>Cancel</Button>
+                                <Button variant="outlined" color="primary" onClick={handleDone}
                                         sx={{display: pageName !== pages.detailPage ? 'none' : 'block'}}>Save
                                 </Button>
                                 <div className="rem-2-spacer"/>
-                                <Button color="primary"
+                                <Button variant="outlined" color="primary"
                                         disabled={pageName !== pages.nameFormPage && pageName !== pages.detailPage}
                                         onClick={handlePrevious} type="submit">
                                     <MdArrowBackIos className="larger"/>Prev
                                 </Button>
-                                <Button color="primary" type="submit" form="form"
+                                <Button variant="outlined" color="primary" type="submit" form="form"
                                         disabled={pageName === pages.detailPage}>
                                     Next<MdArrowForwardIos className="larger"/>
                                 </Button>

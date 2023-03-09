@@ -140,7 +140,7 @@ const ResidenceManagementDialog = ({colony, residence, residenceTags}: Props) =>
                     <ContactWizard fieldName="Responsible" user={responsible}
                                    scopeUsers={[owner, tenant]} emailRequired={true}
                                    setUser={setResponsible}/>
-                    <TextFieldFormikMui formik={formik} name="doorNumber" label="Door number"/>
+                    <TextFieldFormikMui formik={formik} name="doorNumber" label="Door number" className="mt-2"/>
                     <div className="text-red-400">{doorNumberServerError}</div>
                     <MultiSelectFormikMui name="tags"
                                           label="Tags"

@@ -97,7 +97,7 @@ const Residences = ({   colonyId,
                 <div className="flex-1">
                     <MuiSelect value={filterTags} options={residenceTags.map(tag => tag.name)} onChange={changeTagFilter} />
                 </div>
-                <div>By Name <input className="rounded-2xl" autoFocus value={filterText} onChange={changeFilterText}/></div>
+                <div>By Door <input className="rounded-2xl" autoFocus value={filterText} onChange={changeFilterText}/></div>
                 <MdCancel className="cursor-pointer text-xl" onClick={handleClearNameFilter}/>
             </div>
             <div>
