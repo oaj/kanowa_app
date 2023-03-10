@@ -1,6 +1,6 @@
 "use client"
 import {useRef, useState} from "react";
-import {Formik, Field, Form, ErrorMessage} from "formik";
+import {Formik, Field, Form, ErrorMessage, useFormik} from "formik";
 import * as Yup from "yup";
 
 import {IUser} from "@/types/user.type";
@@ -13,6 +13,7 @@ import {IColony} from "@/types/colony.type";
 import {IResidenceTag} from "@/types/residence.tag.type";
 import {capitalizeFirstLetter} from "@/lib/Kanowa.Utils";
 import {saveResidenceTag} from "@/services/residence.tag.service";
+import TextFieldFormikMui from "@/components/common/formik.mui/TextField";
 
 export const revalidate = 1
 
@@ -93,6 +94,12 @@ const ResidenceTagManagementDialog = ({colony, residenceTag}:
         window.history.back()
     }
 
+    const formik = useFormik({
+        initialValues: initialValues.current,
+        validationSchema: validationSchema,
+        onSubmit: handleSaveResidenceTag
+    });
+
     return (
         // <div className="dialog-layout">
         <div className="p-2">
@@ -100,29 +107,15 @@ const ResidenceTagManagementDialog = ({colony, residenceTag}:
                 <div className="text-2xl">{id ? 'Edit' : 'Create'} new tag</div>
                 <div className="text-xl">{initialValues.current.name} in {colony.name}</div>
             </div>
-            <Formik
-                // enableReinitialize
-                initialValues={initialValues.current}
-                validationSchema={validationSchema}
-                onSubmit={handleSaveResidenceTag}
-            >
-                <Form>
+                <form onSubmit={formik.handleSubmit}>
                     <div className="flex flex-col gap-2 pt-4">
-                        <div className="flex flex-col">
-                            <label htmlFor="name">Name</label>
-                            <Field name="name" type="text" className="form-control"/>
-                            <ErrorMessage
-                                name="name"
-                                component="div"
-                                className="alert alert-danger"
-                            />
-                            <div className="text-red-400">{nameError}</div>
-                        </div>
+                        <TextFieldFormikMui formik={formik} name="name" label="Name" className="mt-2"/>
+                        <div className="text-red-400">{nameError}</div>
                         <div className="flex place-content-between gap-2">
-                            <Button type="button" color="warning" disabled={loading} onClick={handleCancel}>
+                            <Button type="button" variant="outlined" color="warning" disabled={loading} onClick={handleCancel}>
                                 Cancel
                             </Button>
-                            <Button type="submit" color="primary" disabled={loading}>
+                            <Button type="submit" variant="outlined" color="primary" disabled={loading}>
                                 {loading && (
                                     <span className="">Loading...</span>
                                 )}
@@ -138,8 +131,7 @@ const ResidenceTagManagementDialog = ({colony, residenceTag}:
                             </div>
                         )}
                     </div>
-                </Form>
-            </Formik>
+                </form>
         </div>
     );
 };

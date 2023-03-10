@@ -114,6 +114,9 @@ export const CssMenu = () => {
                         <Link href='/admin' onClick={handleCloseMenu} className={styles.link}>
                             Admin Board
                         </Link>
+                        <Link href='/poc/mail' onClick={handleCloseMenu} className={styles.link}>
+                            Mail
+                        </Link>
                     </div>
                 </div>
 

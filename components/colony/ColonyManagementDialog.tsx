@@ -154,16 +154,13 @@ const ColonyManagementDialog = ({colony}: { colony: IColony }) => {
             {/*>*/}
             <form onSubmit={formik.handleSubmit}>
                 <div className="flex flex-col gap-3 pt-4">
-                    <FormControl fullWidth>
-                        <InputLabel id="demo-simple-select-label">Type</InputLabel>
-                        <SelectFormikMui formik={formik} name="type" label="Type" labelId="demo-simple-select-label">
-                            {ColonyWebTypes.values.map((type) => {
-                                return (
-                                    <MenuItem key={type.key} value={type.key}>{type.label}</MenuItem>
-                                )
-                            })}
-                        </SelectFormikMui>
-                    </FormControl>
+                    <SelectFormikMui formik={formik} name="type" label="Type">
+                        {ColonyWebTypes.values.map((type) => {
+                            return (
+                                <MenuItem key={type.key} value={type.key}>{type.label}</MenuItem>
+                            )
+                        })}
+                    </SelectFormikMui>
                     <ContactWizard fieldName="President" user={president}
                                    scopeUsers={[treasurer, secretary]} emailRequired={true}
                                    setUser={setPresident}/>
